@@ -1,6 +1,18 @@
+import {Routes, Route} from "react-router-dom";
+import Login from "./components/login/Login";
 import NavBar from "./components/NavBar";
 
-function App() {
+export default function App() {
+  return (
+    <>
+    <NavBar/>
+    <Routes>
+      <Route path="/login" element={<Login/>}/>
+    </Routes>
+    </>
+  )
+}
+/*function App() {
   return (
     <>
     
@@ -14,5 +26,13 @@ function App() {
     </>
   );
 }
-
+  
 export default App;
+*/
+
+/*
+      <Route path="/register" element={<Register/>}/>
+      <Route path="/profile" element={<Profile/>}/>
+      <Route path="/events" element={<Events/>}/>
+      <Route path="/recover" element={<Recover/>}/>
+*/

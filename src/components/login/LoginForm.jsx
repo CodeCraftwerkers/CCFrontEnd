@@ -10,7 +10,7 @@ export default function LoginForm() {
 
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
-        setForm({ ...form[name]: type === "checkbox" ? checked : value});
+        setForm({ ...form, [name]: type === "checkbox" ? checked : value});
 
 };
 
