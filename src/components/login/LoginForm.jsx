@@ -10,13 +10,13 @@ export default function LoginForm() {
 
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
-        setForm({ ...form, [name]: type === "checkbox" ? checked : value});
+        setForm({ ...form,[name]: type === "checkbox" ? checked : value});
 
 };
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+    /*try {
         const res = await fetch("http://localhost:8080/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -39,7 +39,21 @@ const handleSubmit = async (e) => {
     } catch (err) {
         toast.error(err.message);
     }
-};
+};*/
+
+                // Usuario simulado
+    const fakeUser = { email: "demo@user.com", password: "1234" };
+
+    if (form.email === fakeUser.email && form.password === fakeUser.password) {
+      const fakeToken = "fake-jwt-token-123";
+      const storage = form.remember ? localStorage : sessionStorage;
+      storage.setItem("token", fakeToken);
+      toast.success("Inicio de sesión exitoso (modo demo)");
+      setTimeout(() => (window.location.href = "/dashboard"), 1000);
+    } else {
+      toast.error("Credenciales inválidas (modo demo)");
+    }
+  };
 
 return (
     <form
@@ -76,7 +90,7 @@ return (
                 />
                 Recordarme
             </label>
-            <a href="/forgot" className="link-primary">
+            <a href="/recover" className="link-primary">
                 Olvidé mi contraseña
             </a>
         </div>
