@@ -1,58 +1,17 @@
 export default function NavBar() {
   return (
-    <nav
-      style={{
-        width: "100vw",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        background: "white",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-        zIndex: 9999,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "16px 40px",
-          height: "70px",
-        }}
-      >
-       
+    <nav className="w-screen fixed top-0 left-0 bg-white shadow-md z-[9999]">
+      <div className="flex items-center justify-between px-6 md:px-10 py-4 h-[70px]">
         <img
           src="/LogoMobile.svg"
           alt="Logo"
-          style={{
-            height: "40px",
-            objectFit: "contain",
-          }}
+          className="h-8 md:h-10 object-contain"
         />
-
-        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <button
-            style={{
-              background: "transparent",
-              border: "none",
-              color: "#333",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            Iniciar Sesión
+        <div className="flex items-center gap-3 md:gap-5">
+          <button className="text-gray-800 text-sm md:text-base hover:text-purple-700 transition-colors">
+            Iniciar sesión
           </button>
-          <button
-            style={{
-              background: "#7e22ce",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              padding: "8px 20px",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
+          <button className="bg-purple-700 text-white rounded-lg px-4 md:px-5 py-2 text-sm md:text-base hover:bg-purple-800 transition-colors">
             Registrarse
           </button>
         </div>
