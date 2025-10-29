@@ -1,17 +1,24 @@
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./components/login/Login";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <>
-    <NavBar/>
-    <Routes>
-      <Route path="/login" element={<Login/>}/>
-    </Routes>
-    </>
-  )
+    <div className="min-h-screen flex flex-col">
+      <NavBar />
+
+      <main className="flex-grow pt-24">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }
+
 /*function App() {
   return (
     <>

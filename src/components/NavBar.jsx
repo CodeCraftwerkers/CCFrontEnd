@@ -7,6 +7,7 @@ export default function NavBar() {
           alt="Logo"
           className="h-8 md:h-10 object-contain"
         />
+
         <div className="flex items-center gap-3 md:gap-5">
           <button className="text-gray-800 text-sm md:text-base hover:text-purple-700 transition-colors">
             Iniciar sesión
