@@ -1,6 +1,6 @@
 export default function NavBar() {
   return (
-    <nav className="w-screen fixed top-0 left-0 bg-white shadow-md z-[9999]">
+    <nav className="w-screen fixed top-0 left-0 bg-white shadow-md z-9999">
       <div className="flex items-center justify-between px-6 md:px-10 py-4 h-[70px]">
         <img
           src="/LogoMobile.svg"
