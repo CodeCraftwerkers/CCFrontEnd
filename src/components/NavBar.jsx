@@ -3,9 +3,9 @@ export default function NavBar() {
     <nav className="w-screen fixed top-0 left-0 bg-white shadow-md z-9999">
       <div className="flex items-center justify-between px-6 md:px-10 py-4 h-[70px]">
         <img
-          src="/LogoMobile.svg"
+          src="src\assets\img\LogoGradient_NaranjaButano.png"
           alt="Logo"
-          className="h-8 md:h-10 object-contain"
+          className="h-10 md:h-20 object-contain"
         />
         <div className="flex items-center gap-3 md:gap-5">
           <button className="text-gray-800 text-sm md:text-base hover:text-purple-700 transition-colors">

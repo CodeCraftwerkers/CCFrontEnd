@@ -1,17 +1,18 @@
-import {Routes, Route} from "react-router-dom";
-import Login from "./components/login/Login";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar.jsx";
+import Footer from "./components/Footer.jsx";
+import AppRouter from "./application/Router.jsx";
 
 export default function App() {
   return (
     <>
-    <NavBar/>
-    <Routes>
-      <Route path="/login" element={<Login/>}/>
-    </Routes>
+      <NavBar />
+      <AppRouter />
+      <Footer />
     </>
-  )
+  );
 }
+
+
 /*function App() {
   return (
     <>
