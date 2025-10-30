@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function NavBar() {
   return (
     <nav className="w-screen fixed top-0 left-0 bg-white shadow-md z-9999">
@@ -11,9 +13,11 @@ export default function NavBar() {
           <button className="text-gray-800 text-sm md:text-base hover:text-purple-700 transition-colors">
             Iniciar sesión
           </button>
-          <button className="bg-purple-700 text-white rounded-lg px-4 md:px-5 py-2 text-sm md:text-base hover:bg-purple-800 transition-colors">
-            Registrarse
-          </button>
+          <Link to="/register">
+            <button className="bg-red-500 hover:bg-red-600 text-white text-sm md:text-base font-semibold py-2 px-4 rounded-lg shadow-md transition-all">
+              Regístrate
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
