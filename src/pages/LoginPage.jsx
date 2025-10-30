@@ -1,5 +1,5 @@
-import LoginForm from "./LoginForm";
-import LoginToast from "./LoginToast";
+import LoginForm from "../components/login/LoginForm";
+import LoginToast from "../components/login/LoginToast";
 
 export default function Login() {
     return (
