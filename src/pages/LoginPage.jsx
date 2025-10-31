@@ -3,7 +3,11 @@ import { Toaster } from "react-hot-toast";
 
 export default function Login() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200 relative">
+    <div className="flex justify-center min-h-screen relative"
+         style={{ backgroundColor: "var(--color-bg-main)", 
+                  paddingTop: "var(--spacing-3xl)", 
+                  paddingBottom: "var(--spacing-2xl)" }}>
+      
       <Toaster
         containerStyle={{
           top: "50%",
@@ -24,11 +28,11 @@ export default function Login() {
         }}
       />
 
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
-        <h2 className="text-2xl font-semibold mb-2 text-center text-gray-800">
+      <div className="card w-full max-w-sm">
+        <h2 className="text-h2 text-center text-primary mb-2">
           Bienvenida de nuevo
         </h2>
-        <p className="text-sm text-gray-600 text-center mb-6">
+        <p className="text-body text-center text-gray-200 mb-6">
           Inicia sesión para continuar...
         </p>
         <LoginForm />

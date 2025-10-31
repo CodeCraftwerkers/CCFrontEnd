@@ -1,3 +1,4 @@
+import "./App.css";
 import NavBar from "./components/NavBar.jsx";
 import Footer from "./components/Footer.jsx";
 import AppRouter from "./application/Router.jsx";
