@@ -1,44 +1,97 @@
-import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 
-const colors = {
-success: "rgb(34 197 94)",
-warning:
-error:
-primary:
-secondary:
-}
-export const LoginToast = {
-  success: (message = "¡Bienvenida de nuevo!") => {
+export const loginToast = {
+  success: (message = "Te has identificado correctamente, ¡bienvenide!") => {
     toast.success(message, {
       duration: 4000,
-      position: "top-right",
-      style: 
-    })
-  }
-}
+      position: "top-center",
+      style: {
+        background: "var(--color-success)",
+        color: "var(--color-white)",
+        padding: "var(--spacing-md)",
+        borderRadius: "var(--radius-md)",
+        fontWeight: "var(--font-weight-medium)",
+        fontSize: "var(--font-size-body)",
+        boxShadow: "var(--shadow-lg)",
+        minWidth: "300px",
+      },
+      iconTheme: {
+        primary: "var(--color-white)",
+        secondary: "var(--color-success)",
+      },
+    });
+  },
+  error: (message = "Error al iniciar sesión") => {
+    toast.error(message, {
+      duration: 4000,
+      position: "top-center",
+      style: {
+        background: "var(--color-error)",
+        color: "var(--color-white)",
+        padding: "var(--spacing-md)",
+        borderRadius: "var(--radius-md)",
+        fontWeight: "var(--font-weight-medium)",
+        fontSize: "var(--font-size-body)",
+        boxShadow: "var(--shadow-lg)",
+        minWidth: "300px",
+      },
+      iconTheme: {
+        primary: "var(--color-white)",
+        secondary: "var(--color-error)",
+      },
+    });
+  },
+  warning: (message = "Advertencia") => {
+    toast(message, {
+      icon: "⚠️",
+      duration: 4000,
+      position: "top-center",
+      style: {
+        background: "var(--color-warning)",
+        color: "var(--color-white)",
+        padding: "var(--spacing-md)",
+        borderRadius: "var(--radius-md)",
+        fontWeight: "var(--font-weight-medium)",
+        fontSize: "var(--font-size-body)",
+        boxShadow: "var(--shadow-lg)",
+        minWidth: "300px",
+      },
+    });
+  },
+  info: (message = "Información") => {
+    toast(message, {
+      icon: "ℹ️",
+      duration: 4000,
+      position: "top-center",
+      style: {
+        background: "var(--color-info)",
+        color: "var(--color-white)",
+        padding: "var(--spacing-md)",
+        borderRadius: "var(--radius-md)",
+        fontWeight: "var(--font-weight-medium)",
+        fontSize: "var(--font-size-body)",
+        boxShadow: "var(--shadow-lg)",
+        minWidth: "300px",
+      },
+    });
+  },
 
-/*export default function LoginToast() {
-    return (
-        <Toaster position = "top-right"
-         toastOptions={{
-        duration: 2500,
-        style: {
-          background: "#258d97",
-          color: "#fff",
-          borderRadius: "8px",
-        },
-        success: {
-          iconTheme: {
-            primary: "#fff",
-            secondary: "#258d97",
-          },
-        },
-        error: {
-          style: { background: "#dc2626" },
-        },
-      }}
-    />
-  );
-}
-*/
+  loading: (message = "Iniciando sesión...") => {
+    return toast.loading(message, {
+      position: "top-center",
+      style: {
+        background: "var(--color-white)",
+        color: "var(--color-gray-700)",
+        padding: "var(--spacing-md)",
+        borderRadius: "var(--radius-md)",
+        fontWeight: "var(--font-weight-medium)",
+        fontSize: "var(--font-size-body)",
+        boxShadow: "var(--shadow-xl)",
+        minWidth: "300px",
+      },
+    });
+  },
+  dismiss: (toastId) => {
+    toast.dismiss(toastId);
+  },
+};
