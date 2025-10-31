@@ -1,6 +1,7 @@
 import NavBar from "./components/NavBar.jsx";
 import Footer from "./components/Footer.jsx";
 import AppRouter from "./application/Router.jsx";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
@@ -8,10 +9,27 @@ export default function App() {
       <NavBar />
       <AppRouter />
       <Footer />
+
+      <Toaster
+        containerStyle={{
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          position: "fixed",
+          zIndex: 9999,
+        }}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            minWidth: "300px",
+            padding: "var(--spacing-md)",
+            borderRadius: "var(--radius-md)",
+          },
+        }}
+      />
     </>
   );
 }
-
 
 /*function App() {
   return (
