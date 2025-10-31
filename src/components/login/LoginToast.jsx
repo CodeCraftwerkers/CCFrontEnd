@@ -1,8 +1,24 @@
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 
+const colors = {
+success: "rgb(34 197 94)",
+warning:
+error:
+primary:
+secondary:
+}
+export const LoginToast = {
+  success: (message = "¡Bienvenida de nuevo!") => {
+    toast.success(message, {
+      duration: 4000,
+      position: "top-right",
+      style: 
+    })
+  }
+}
 
-export default function LoginToast() {
+/*export default function LoginToast() {
     return (
         <Toaster position = "top-right"
          toastOptions={{
@@ -25,3 +41,4 @@ export default function LoginToast() {
     />
   );
 }
+*/
