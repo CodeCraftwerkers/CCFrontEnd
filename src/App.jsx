@@ -35,5 +35,5 @@ export default App;
       <Route path="/register" element={<Register/>}/>
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/events" element={<Events/>}/>
-      <Route path="/recover" element={<Recover/>}/>
+      <Route path="/dashboard" element={<Dashboard/>}/>
 */

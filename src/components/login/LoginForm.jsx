@@ -90,9 +90,7 @@ return (
                 />
                 Recordarme
             </label>
-            <a href="/recover" className="link-primary">
-                Olvidé mi contraseña
-            </a>
+            
         </div>
 
         <button type="submit" className="btn-primary">
