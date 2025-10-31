@@ -9,7 +9,7 @@ export default function CTASection() {
   return (
     <section
       aria-labelledby="cta-section-title"
-      className="bg-linear-to-br from-orange-50 via-white to-orange-100 py-20 border-t border-orange-200"
+      className="bg-gradient-to-br from-orange-50 via-white to-orange-100 py-20 border-t border-orange-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* === Header principal === */}
