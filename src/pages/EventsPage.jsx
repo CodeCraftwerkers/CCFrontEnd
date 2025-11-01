@@ -3,10 +3,10 @@ import { useState } from "react";
 import { EventCard } from "../components/events/EventCard";
 import { SearchBar } from "../components/events/SearchBar"; // 👈 nuevo import
 
-const EventsPage = () => {
+export default function EventsPage() {
   const [joinedEvents, setJoinedEvents] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // 👈 para manejar el texto del buscador
-  const [filterType, setFilterType] = useState("all"); // 👈 para “Todos / Online / Presencial”
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("all");
 
   const toggleJoinEvent = (id) => {
     setJoinedEvents((prev) =>
@@ -52,4 +52,4 @@ const EventsPage = () => {
   );
 };
 
-export default EventsPage;
+
