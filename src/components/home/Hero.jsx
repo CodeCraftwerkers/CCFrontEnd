@@ -9,7 +9,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="w-full bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 text-white pt-[70px] overflow-hidden">
+    <section className="w-full bg-linear-to-br from-orange-500 via-orange-600 to-red-600 text-white pt-[70px] overflow-hidden">
 
       <div className="px-4 sm:px-6 lg:px-16 xl:px-24 py-20 lg:py-32">
         <header className="text-center">
