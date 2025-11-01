@@ -1,21 +1,34 @@
-import { Routes, Route } from "react-router-dom";
-import Login from "./components/login/Login";
-import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
+import "./App.css";
+import NavBar from "./components/NavBar.jsx";
+import Footer from "./components/Footer.jsx";
+import AppRouter from "./application/Router.jsx";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <NavBar />
-
-      <main className="flex-grow pt-24">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </main>
-
+      <AppRouter />
       <Footer />
-    </div>
+
+      <Toaster
+        containerStyle={{
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          position: "fixed",
+          zIndex: 9999,
+        }}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            minWidth: "300px",
+            padding: "var(--spacing-md)",
+            borderRadius: "var(--radius-md)",
+          },
+        }}
+      />
+    </>
   );
 }
 
@@ -41,5 +54,5 @@ export default App;
       <Route path="/register" element={<Register/>}/>
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/events" element={<Events/>}/>
-      <Route path="/recover" element={<Recover/>}/>
+      <Route path="/dashboard" element={<Dashboard/>}/>
 */
