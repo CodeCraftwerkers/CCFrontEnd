@@ -14,7 +14,7 @@ export default function NavBar() {
             Iniciar sesión
           </button>
           <Link to="/register">
-            <button className="bg-red-500 hover:bg-red-600 text-white text-sm md:text-base font-semibold py-2 px-4 rounded-lg shadow-md transition-all">
+            <button className="bg-gradient-to-br from-orange-700 via-orange-600 to-red-600 hover:bg-red-600 text-white text-sm md:text-base font-semibold py-2 px-4 rounded-lg shadow-md transition-all">
               Regístrate
             </button>
           </Link>
