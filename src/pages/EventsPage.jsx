@@ -1,9 +1,12 @@
-//import NavBar from "../components/NavBar.jsx";
+import DashboardHeader from "../components/dashboard/DashboardHeader";
 import { useState } from "react";
 import { EventCard } from "../components/events/EventCard";
+import { SearchBar } from "../components/events/SearchBar"; // 👈 nuevo import
 
 const EventsPage = () => {
   const [joinedEvents, setJoinedEvents] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // 👈 para manejar el texto del buscador
+  const [filterType, setFilterType] = useState("all"); // 👈 para “Todos / Online / Presencial”
 
   const toggleJoinEvent = (id) => {
     setJoinedEvents((prev) =>
@@ -27,13 +30,26 @@ const EventsPage = () => {
   };
 
   return (
-    <main className="max-w-5xl mx-auto p-6 bg-gray-50 min-h-screen pt-24">
-      <EventCard
-        event={mockEvent}
-        isJoined={joinedEvents.includes(mockEvent.id)}
-        toggleJoinEvent={toggleJoinEvent}
-      />
-    </main>
+    <>
+      <DashboardHeader />
+      <main className="max-w-5xl mx-auto p-6 bg-gray-50 min-h-screen pt-24">
+        {/* ---------- SearchBar arriba ---------- */}
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filterType={filterType}
+          setFilterType={setFilterType}
+        />
+
+        {/* ---------- Tarjeta de evento ---------- */}
+        <EventCard
+          event={mockEvent}
+          isJoined={joinedEvents.includes(mockEvent.id)}
+          toggleJoinEvent={toggleJoinEvent}
+        />
+      </main>
+    </>
   );
 };
+
 export default EventsPage;
