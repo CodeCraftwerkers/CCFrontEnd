@@ -1,4 +1,6 @@
 import { useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
 import NavBar from "./components/NavBar.jsx";
 import Footer from "./components/Footer.jsx";
 import AppRouter from "./application/Router.jsx";
