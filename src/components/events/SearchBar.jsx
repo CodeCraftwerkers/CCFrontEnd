@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { DateFilter } from "./DateFilter"; 
 
 export const SearchBar = ({
   searchTerm,
@@ -6,6 +7,8 @@ export const SearchBar = ({
   filterType,
   setFilterType,
   visibleCount, 
+  dateFilter,
+  setDateFilter
   }) => {
   return (
     <section className="bg-white rounded-xl shadow-sm p-6 mb-8">
@@ -44,26 +47,11 @@ export const SearchBar = ({
           </button>
         ))}
       </div>
-
-      {/* Filtros inferiores (Mostrando X eventos / Filtro de fecha) */}
+       {/* Filtros inferiores (Mostrando X eventos / Filtro de fecha) */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm text-gray-600">
-        {/* Texto de cantidad de eventos */}
-        <p>Mostrando {visibleCount} evento{visibleCount !== 1 && "s"}</p>
+         <p>Mostrando {visibleCount} evento{visibleCount !== 1 && "s"}</p>
 
-        {/* Dropdown de fechas (Lo convertimos en un componente? */}
-        <div className="flex items-center gap-2">
-          <label htmlFor="dateFilter" className="text-gray-700 font-medium">
-            Mostrar:
-          </label>
-          <select
-            id="dateFilter"
-            className="border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-          >
-            <option value="today">Hoy</option>
-            <option value="week">Esta semana</option>
-            <option value="month">Este mes</option>
-          </select>
-        </div>
+          <DateFilter dateFilter={dateFilter} setDateFilter={setDateFilter} />
       </div>
     </section>
   );
