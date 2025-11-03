@@ -1,35 +1,15 @@
 import { useEffect, useState } from "react";
-import { User, Users, Search } from "lucide-react";
+import { mockEvents } from "../../data/mockEvents";
 
 export default function FeaturedEvents() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    // Datos simulados de eventos
-    const mockEvents = [
-      {
-        id: 1,
-        title: "React Meetup Barcelona",
-        date: "10 Nov 2025",
-        description:
-          "Una tarde de networking, charlas y proyectos con la comunidad React.",
-      },
-      {
-        id: 2,
-        title: "Hackathon Women in Tech",
-        date: "15 Nov 2025",
-        description:
-          "Colabora en equipo durante 24 horas para resolver retos tecnológicos.",
-      },
-      {
-        id: 3,
-        title: "Workshop Tailwind & React",
-        date: "01 Dic 2025",
-        description:
-          "Aprende a crear interfaces modernas y responsivas con TailwindCSS.",
-      },
-    ];
-    setTimeout(() => setEvents(mockEvents), 800);
+    // Así se ven los más próximos eventos en la Home
+    const sorted = [...mockEvents].sort(
+      (a, b) => new Date(a.startDateTime) - new Date(b.startDateTime)
+    );
+    setEvents(sorted.slice(0, 3));
   }, []);
 
   return (
@@ -51,12 +31,12 @@ export default function FeaturedEvents() {
           </p>
         </header>
 
-        {/* Tarjetas de eventos simulados */}
+        {/* Tarjetas de eventos simulados en el archivo MockEvents.jsx */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {events.length === 0 ? (
-            <p className="col-span-full text-center text-gray-500">
-              Cargando eventos...
-            </p>
+      {events.length === 0 ? (
+        <p className="col-span-full text-center text-gray-500">
+          Cargando eventos...
+        </p>
           ) : (
             events.map((event) => (
               <article
@@ -67,10 +47,11 @@ export default function FeaturedEvents() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {event.title}
                 </h3>
-                <p className="text-sm text-orange-600 mb-2">{event.date}</p>
-                <p className="text-gray-600 mb-4 text-sm">
-                  {event.description}
+                <p className="text-sm text-orange-600 mb-1">{event.date}</p>
+                <p className="text-sm font-medium text-gray-500 mb-2">
+                  {event.category === "ONLINE" ? "🌐 Online" : "📍 Presencial"}
                 </p>
+                <p className="text-gray-600 mb-4 text-sm">{event.description}</p>
                 <button
                   type="button"
                   className="px-4 py-2 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-all duration-300"
@@ -94,6 +75,6 @@ export default function FeaturedEvents() {
           </button>
         </div>
       </section>
-     </>
+    </>
   );
 }

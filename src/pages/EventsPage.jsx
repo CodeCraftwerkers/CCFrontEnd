@@ -1,130 +1,129 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 import { SearchBar } from "../components/events/SearchBar";
-import { EventsTabs } from "../components/events/EventsTabs";
 import { EventCard } from "../components/events/EventCard";
+import { EventsTabs } from "../components/events/EventsTabs";
+import { mockEvents } from "../data/mockEvents";
+//import axios from "axios";  //Para usar la API real. 
+// import { getEventsByCategory } from "../services/ApiEvent";
 
 export default function EventsPage() {
-  // 1Estados del componente
-  const [joinedEvents, setJoinedEvents] = useState([]);
+  const [events, setEvents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
-  const [activeTab, setActiveTab] = useState("created");
-  const [dateFilter, setDateFilter] = useState("all"); // 👈 nuevo
+  const [filterType, setFilterType] = useState("ALL"); 
+  const [dateFilter, setDateFilter] = useState("ALL"); 
+  const [activeTab, setActiveTab] = useState("joined");
 
-  // Función de toggle para unirse a eventos
-  const toggleJoinEvent = (id) => {
-    setJoinedEvents((prev) =>
-      prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
-    );
-  };
+  useEffect(() => {
+    // Simulación temporal de datos (futura llamada a API)
+    setEvents(mockEvents);
+  }, []);
+//Luego cambiamos esto por la búsqueda real, chicas, la pongo más abajo "comentada"
 
-  // Eventos temporales 
-  const mockEvents = [
-    {
-      id: 1,
-      title: "Masterclass: React Avanzado",
-      date: "15 Nov 2025",
-      time: "18:00",
-      type: "online",
-      category: "Masterclass",
-      attendees: 45,
-      maxAttendees: 100,
-      organizer: "@Factoria",
-      tags: ["React", "Frontend"],
-      image:
-        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=450&fit=crop",
-    },
-    {
-      id: 2,
-      title: "Hackaton IA & Machine Learning",
-      date: "20 Nov 2025",
-      time: "09:00",
-      type: "presencial",
-      category: "Hackaton",
-      attendees: 78,
-      maxAttendees: 150,
-      organizer: "@mariatech",
-      tags: ["AI", "Python", "ML"],
-      image:
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=450&fit=crop",
-    },
-    {
-      id: 3,
-      title: "Taller: Spring Boot Best Practices",
-      date: "22 Nov 2025",
-      time: "16:00",
-      type: "online",
-      category: "Taller",
-      attendees: 32,
-      maxAttendees: 50,
-      organizer: "@devmaster",
-      tags: ["Java", "Spring", "Backend"],
-      image:
-        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=450&fit=crop",
-    },
-  ];
+      const filteredEvents = events.filter((event) => {
+      const search = searchTerm.toLowerCase();
 
-  // Filtrado dinámico 
-  const today = new Date();
+      const matchesSearch =
+        event.title.toLowerCase().includes(search) ||
+        event.description.toLowerCase().includes(search) ||
+        (event.tags && event.tags.some((tag) => tag.toLowerCase().includes(search)));
 
-  const filteredEvents = mockEvents.filter((event) => {
-    const eventDate = new Date(event.date + " 2025"); // 👈 convierte texto en fecha
+      const matchesType =
+        filterType === "ALL" || event.category === filterType;
 
-    const matchesType =
-      filterType === "all" || event.type === filterType;
+      const eventDate = new Date(event.startDateTime);
+      const today = new Date();
 
-    const matchesTerm =
-      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.organizer.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDate =
+        dateFilter === "ALL" ||
+        (dateFilter === "TODAY" &&
+          eventDate.toDateString() === today.toDateString()) ||
+        (dateFilter === "WEEK" &&
+          eventDate >= today &&
+          eventDate <= new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7)) ||
+        (dateFilter === "MONTH" &&
+          eventDate.getMonth() === today.getMonth() &&
+          eventDate.getFullYear() === today.getFullYear());
 
-    // Filtrado por fechas
-    let matchesDate = true;
-    if (dateFilter === "today") {
-      matchesDate = eventDate.toDateString() === today.toDateString();
-    } else if (dateFilter === "week") {
-      const startOfWeek = new Date(today);
-      startOfWeek.setDate(today.getDate() - today.getDay());
-      const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 7);
-      matchesDate = eventDate >= startOfWeek && eventDate < endOfWeek;
-    } else if (dateFilter === "month") {
-      matchesDate =
-        eventDate.getMonth() === today.getMonth() &&
-        eventDate.getFullYear() === today.getFullYear();
-    }
-
-    return matchesType && matchesTerm && matchesDate;
+      return matchesSearch && matchesType && matchesDate;
   });
 
-  // Renderizado. 
+  /* 
+    Endpoints disponibles:
+      - GET /events/filter?timeRange=today
+      - GET /events/filter?timeRange=week
+      - GET /events/filter?timeRange=month
+      - GET /events/filter?category=ONLINE
+      - GET /events/filter?category=PRESENCIAL
+      - GET /events/filter?username=Alexandra
+      - GET /events/filter?title=Java
+
+    Implementar para probar: 
+  
+  useEffect(() => {
+    const fetchFilteredEvents = async () => {
+      try {
+        const BASE_URL = "http://localhost:8080/api/v1"; // Cambiar si usan otro puerto
+        let endpoint = `${BASE_URL}/events/filter?`;
+
+        // Filtrado por categoría (ONLINE / PRESENCIAL)
+        if (filterType !== "ALL") {
+          endpoint += `category=${filterType}`;
+        }
+
+        // Filtrado por fecha
+        else if (dateFilter !== "ALL") {
+          endpoint += `timeRange=${dateFilter.toLowerCase()}`;
+        }
+
+        // Filtrado por búsqueda de texto o título
+        else if (searchTerm.trim() !== "") {
+          endpoint += `title=${encodeURIComponent(searchTerm)}`;
+        }
+
+        const { data } = await axios.get(endpoint);
+        setEvents(data);
+      } catch (error) {
+        console.error("Error al obtener los eventos filtrados:", error);
+      }
+    };
+
+    fetchFilteredEvents();
+  }, [filterType, dateFilter, searchTerm]);
+  */
+
+
   return (
-    <>
+    <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 bg-gray-50 min-h-screen">
       <DashboardHeader />
-      <main className="max-w-5xl mx-auto p-6 bg-gray-50 min-h-screen pt-24">
-        <SearchBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          filterType={filterType}
-          setFilterType={setFilterType}
-          visibleCount={filteredEvents.length}
-          dateFilter={dateFilter}
-          setDateFilter={setDateFilter}
-        />
-
-        <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-
-        <div className="flex flex-col gap-6">
-          {filteredEvents.map((event) => (
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        filterType={filterType}
+        setFilterType={setFilterType}
+        visibleCount={filteredEvents.length}
+        dateFilter={dateFilter}
+        setDateFilter={setDateFilter}
+      />
+      <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <section className="grid grid-cols-1 gap-8 mt-8 max-w-4xl mx-auto">
+        {filteredEvents.length > 0 ? (
+          filteredEvents.map((event) => (
             <EventCard
               key={event.id}
               event={event}
-              isJoined={joinedEvents.includes(event.id)}
-              toggleJoinEvent={toggleJoinEvent}
+              toggleJoinEvent={() => {}}
+              joinedEvents={[]}
             />
-          ))}
-        </div>
-      </main>
-    </>
+            
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500">
+            No se encontraron eventos.
+          </p>
+        )}
+      </section>
+
+    </main>
   );
 }
