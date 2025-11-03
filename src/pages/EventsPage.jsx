@@ -1,22 +1,25 @@
 import { useState } from "react";
-import { DashboardHeader } from "../components/dashboard/DashboardHeader";
+import DashboardHeader from "../components/dashboard/DashboardHeader";
 import { SearchBar } from "../components/events/SearchBar";
+import { EventsTabs } from "../components/events/EventsTabs";
 import { EventCard } from "../components/events/EventCard";
-import { EventsTabs } from "../components/events/EventTabs";
 
 export default function EventsPage() {
+  // 1Estados del componente
   const [joinedEvents, setJoinedEvents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [activeTab, setActiveTab] = useState("created");
-  const [dateFilter, setDateFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all"); // 👈 nuevo
 
+  // Función de toggle para unirse a eventos
   const toggleJoinEvent = (id) => {
     setJoinedEvents((prev) =>
       prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
     );
   };
 
+  // Eventos temporales 
   const mockEvents = [
     {
       id: 1,
@@ -62,10 +65,11 @@ export default function EventsPage() {
     },
   ];
 
+  // Filtrado dinámico 
   const today = new Date();
 
   const filteredEvents = mockEvents.filter((event) => {
-    const eventDate = new Date(event.date + " 2025");
+    const eventDate = new Date(event.date + " 2025"); // 👈 convierte texto en fecha
 
     const matchesType =
       filterType === "all" || event.type === filterType;
@@ -74,6 +78,7 @@ export default function EventsPage() {
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.organizer.toLowerCase().includes(searchTerm.toLowerCase());
 
+    // Filtrado por fechas
     let matchesDate = true;
     if (dateFilter === "today") {
       matchesDate = eventDate.toDateString() === today.toDateString();
@@ -92,6 +97,7 @@ export default function EventsPage() {
     return matchesType && matchesTerm && matchesDate;
   });
 
+  // Renderizado. 
   return (
     <>
       <DashboardHeader />
@@ -121,4 +127,6 @@ export default function EventsPage() {
       </main>
     </>
   );
-}
+};
+
+
