@@ -37,7 +37,7 @@ export const LoginForm = ({ onSuccess }) => {
         const storage = data.rememberMe ? localStorage : sessionStorage;
         storage.setItem("token", fakeToken);
         UserToast.success("Inicio de sesión exitoso (modo demo)");
-        setTimeout(() => (window.location.href = "/dashboard"), 1000);
+        setTimeout(() => (window.location.href = "/"), 1000);
         return;
       }
 
@@ -61,11 +61,12 @@ export const LoginForm = ({ onSuccess }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800 text-center">
+  <div className="min-h-screen flex items-center justify-center bg-gray-200 pt-[70px]">
+    <div className="bg-gray-50 rounded-2xl shadow p-8 w-80">
+      <h2 className="text-center text-xl font-semibold mb-2">
         Bienvenida de nuevo
       </h2>
-      <p className="text-center text-gray-500 text-sm">
+      <p className="text-center text-gray-500 text-sm mb-6">
         Inicia sesión con tu correo y contraseña
       </p>
 
@@ -74,7 +75,7 @@ export const LoginForm = ({ onSuccess }) => {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
             Email
           </label>
@@ -84,20 +85,17 @@ export const LoginForm = ({ onSuccess }) => {
               {...register("email")}
               id="email"
               type="email"
-              autoComplete="email"
               placeholder="tu@email.com"
               className={clsx(
-                "block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
+                "block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 transition",
                 errors.email
-                  ? "border-(--color-error) focus:ring-(--color-error)/30"
-                  : "border-gray-300 focus:border-(--color-primary-main) focus:ring-(--color-primary-main)/30"
+                  ? "focus:ring-red-300"
+                  : "focus:ring-(--color-primary-main)/30"
               )}
             />
           </div>
           {errors.email && (
-            <p className="mt-1 text-sm text-(--color-error)">
-              {errors.email.message}
-            </p>
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
           )}
         </div>
 
@@ -105,7 +103,7 @@ export const LoginForm = ({ onSuccess }) => {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
             Contraseña
           </label>
@@ -115,14 +113,8 @@ export const LoginForm = ({ onSuccess }) => {
               {...register("password")}
               id="password"
               type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
               placeholder="••••••••"
-              className={clsx(
-                "block w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
-                errors.password
-                  ? "border-(--color-error) focus:ring-(--color-error)/30"
-                  : "border-gray-300 focus:border-(--color-primary-main) focus:ring-(--color-primary-main)/30"
-              )}
+              className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-(--color-primary-main)/30"
             />
             <button
               type="button"
@@ -130,14 +122,14 @@ export const LoginForm = ({ onSuccess }) => {
               className="absolute inset-y-0 right-0 pr-3 flex items-center"
             >
               {showPassword ? (
-                <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
+                <EyeOff className="h-5 w-5 text-gray-400" />
               ) : (
-                <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
+                <Eye className="h-5 w-5 text-gray-400" />
               )}
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-(--color-error)">
+            <p className="mt-1 text-sm text-red-500">
               {errors.password.message}
             </p>
           )}
@@ -149,11 +141,11 @@ export const LoginForm = ({ onSuccess }) => {
             {...register("rememberMe")}
             id="rememberMe"
             type="checkbox"
-            className="h-4 w-4 text-(--color-primary-main) focus:ring-(--color-primary-main) border-gray-300 rounded cursor-pointer"
+            className="h-4 w-4 text-(--color-primary-main) border-gray-300 rounded"
           />
           <label
             htmlFor="rememberMe"
-            className="ml-2 block text-sm text-gray-700 cursor-pointer"
+            className="ml-2 text-sm text-gray-700 cursor-pointer"
           >
             Recordarme
           </label>
@@ -162,22 +154,22 @@ export const LoginForm = ({ onSuccess }) => {
         {/* Botón */}
         <button
           type="submit"
-          className="w-full flex justify-center items-center py-3 px-4 rounded-lg shadow-md text-sm font-medium text-white bg-(--color-primary-main) hover:bg-(--color-primary-dark) transition"
+          className="w-full bg-(--color-primary-main) hover:bg-(--color-primary-dark) text-white font-semibold py-2 rounded-lg shadow-md transition-all"
         >
-          <LogIn className="w-5 h-5 mr-2" /> Iniciar Sesión
+          Iniciar sesión
         </button>
 
-        {/* Ir a registro */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+        {/* Link registro */}
+        <p className="text-center text-sm text-gray-600 mt-4">
           ¿No tienes cuenta?{" "}
           <Link
             to="/register"
-            className="font-medium text-(--color-primary-main) hover:text-(--color-primary-dark) transition"
+            className="font-medium text-(--color-primary-main) hover:text-(--color-primary-dark)"
           >
             Regístrate gratis
           </Link>
         </p>
       </form>
     </div>
-  );
-};
+  </div>
+)}
