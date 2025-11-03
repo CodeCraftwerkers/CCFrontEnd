@@ -37,7 +37,6 @@ export default function ProfilePage() {
 
       <main className="min-h-screen bg-gray-100 pt-28 pb-10 flex flex-col items-center">
 
-        {/* Perfil */}
         <section className="bg-white w-full max-w-4xl rounded-xl shadow-md p-8 text-center">
 
           <div className="w-24 h-24 mx-auto bg-orange-500 flex items-center justify-center text-white font-bold text-2xl rounded-full">
