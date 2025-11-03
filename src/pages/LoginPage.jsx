@@ -32,7 +32,7 @@ export default function Login() {
         <h2 className="text-h2 text-center text-primary mb-2">
           Bienvenida de nuevo
         </h2>
-        <p className="text-body text-center text-gray-200 mb-6">
+        <p className="text-body text-center text-gray-400 mb-6">
           Inicia sesión para continuar...
         </p>
         <LoginForm />

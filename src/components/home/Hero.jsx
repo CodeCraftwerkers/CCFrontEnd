@@ -1,4 +1,3 @@
-
 import { ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; 
 
@@ -10,8 +9,9 @@ export default function Hero() {
   };
 
   return (
-    <section className="bg-linear-to-br from-orange-500 via-orange-600 to-red-600 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+    <section className="w-full bg-linear-to-br from-orange-500 via-orange-600 to-red-600 text-white pt-[70px] overflow-hidden">
+
+      <div className="px-4 sm:px-6 lg:px-16 xl:px-24 py-20 lg:py-32">
         <header className="text-center">
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
             Conecta, Aprende y Crece<br />con la Comunidad Tech
@@ -37,7 +37,7 @@ export default function Hero() {
                 className="relative z-10 transition-transform duration-300 ease-out group-hover:translate-x-2"
                 aria-hidden="true"
             />
-            </button>
+          </button>
         </header>
       </div>
     </section>
