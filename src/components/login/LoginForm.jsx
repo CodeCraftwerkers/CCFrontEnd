@@ -14,22 +14,18 @@ const loginSchema = z.object({
   rememberMe: z.boolean().optional(),
 });
 
+// Usuario simulado (modo demo)
 const fakeUser = { email: "demo@user.com", password: "123456" };
 
 export const LoginForm = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
+    defaultValues: { email: "", password: "", rememberMe: false },
   });
 
   const onSubmit = (data) => {
@@ -42,123 +38,145 @@ export const LoginForm = ({ onSuccess }) => {
     } else {
       loginToast.error("Credenciales inválidas (modo demo)");
     }
+
+    /* === Versión con backend (comentada) ===
+    axios
+      .post("/api/auth/login", data)
+      .then((response) => {
+        loginToast.success("¡Bienvenido de nuevo!");
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+        }
+        if (onSuccess) onSuccess(response.data);
+      })
+      .catch((error) => {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Error al iniciar sesión";
+        loginToast.error(errorMessage);
+      });
+    */
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Email
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                {...register("email")}
-                id="email"
-                type="email"
-                autoComplete="email"
-                className={clsx(
-                  "block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
-                  errors.email
-                    ? "border-(--color-error) focus:border-(--color-error) focus:ring-(--color-error)/20"
-                    : "border-gray-300 focus:border-(--color-primary-main) focus:ring-(--color-primary-main)/20"
-                )}
-                placeholder="tu@email.com"
-              />
-            </div>
-            {errors.email && (
-              <p className="mt-1 text-sm text-(--color-error)">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+    <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg">
+      <h3 className="text-h3 text-center text-primary mb-2">
+          Bienvenida de nuevo
+        </h3>
+        <p className="text-body text-center text-gray-400 mb-6">
+          Inicia sesión para continuar...
+        </p>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Contraseña
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                {...register("password")}
-                id="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                className={clsx(
-                  "block w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
-                  errors.password
-                    ? "border-(--color-error) focus:border-(--color-error) focus:ring-(--color-error)/20"
-                    : "border-gray-300 focus:border-(--color-primary-main) focus:ring-(--color-primary-main)/20"
-                )}
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
-                ) : (
-                  <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
-                )}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="mt-1 text-sm text-(--color-error)">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                {...register("rememberMe")}
-                id="rememberMe"
-                type="checkbox"
-                className="h-4 w-4 text-(--color-primary-main) focus:ring-(--color-primary-main) border-gray-300 rounded cursor-pointer"
-              />
-              <label
-                htmlFor="rememberMe"
-                className="ml-2 block text-sm text-gray-700 cursor-pointer"
-              >
-                Recordarme
-              </label>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-(--color-primary-main) hover:bg-(--color-primary-dark) transition"
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Email */}
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700 mb-2"
           >
-            <LogIn className="w-5 h-5 mr-2" />
-            Iniciar Sesión
-          </button>
+            Email
+          </label>
+          <div className="relative">
+            <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <input
+              {...register("email")}
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="tu@email.com"
+              className={clsx(
+                "block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
+                errors.email
+                  ? "border-(--color-error) focus:ring-(--color-error)/20"
+                  : "border-gray-300 focus:ring-(--color-primary-main)/20"
+              )}
+            />
+          </div>
+          {errors.email && (
+            <p className="mt-1 text-sm text-(--color-error)">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
 
-          <p className="text-center text-sm text-gray-600 mt-6">
-            ¿No tienes cuenta?{" "}
-            <Link
-              to="/register"
-              className="font-medium text-(--color-primary-main) hover:text-(--color-primary-dark) transition"
+        {/* Contraseña */}
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Contraseña
+          </label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <input
+              {...register("password")}
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              placeholder="••••••••"
+              className={clsx(
+                "block w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
+                errors.password
+                  ? "border-(--color-error) focus:ring-(--color-error)/20"
+                  : "border-gray-300 focus:ring-(--color-primary-main)/20"
+              )}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
             >
-              Regístrate gratis
-            </Link>
-          </p>
-        </form>
-      </div>
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="mt-1 text-sm text-(--color-error)">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        {/* Recordarme */}
+        <div className="flex items-center">
+          <input
+            {...register("rememberMe")}
+            id="rememberMe"
+            type="checkbox"
+            className="h-4 w-4 text-(--color-primary-main) border-gray-300 rounded cursor-pointer"
+          />
+          <label
+            htmlFor="rememberMe"
+            className="ml-2 block text-sm text-gray-700 cursor-pointer"
+          >
+            Recordarme
+          </label>
+        </div>
+
+        {/* Botón */}
+        <button
+          type="submit"
+          className="w-full flex justify-center items-center py-3 px-4 rounded-lg text-sm font-medium text-white bg-(--color-primary-main) hover:bg-(--color-primary-dark) shadow-md transition"
+        >
+          <LogIn className="w-5 h-5 mr-2" /> Iniciar sesión
+        </button>
+
+        {/* Ir a registro */}
+        <p className="text-center text-sm text-gray-600 mt-6">
+          ¿No tienes cuenta?{" "}
+          <Link
+            to="/register"
+            className="font-medium text-(--color-primary-main) hover:text-(--color-primary-dark) transition"
+          >
+            Regístrate gratis
+          </Link>
+        </p>
+      </form>
     </div>
   );
 };
