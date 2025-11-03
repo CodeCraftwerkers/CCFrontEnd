@@ -57,7 +57,7 @@ export default function ProfilePage() {
             <span>{user.connections} conexiones</span>
           </div>
 
-          <button className="mt-5 px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition">
+          <button className="mt-5 px-6 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition">
             Editar perfil
           </button>
         </section>

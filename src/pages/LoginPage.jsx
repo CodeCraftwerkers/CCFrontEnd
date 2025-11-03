@@ -1,36 +1,14 @@
-import { LoginForm } from "../components/login/LoginForm";
-import { Toaster } from "react-hot-toast";
+import { LoginForm } from "../components/LoginForm";
+import { UserToastComponent } from "../components/UserToast";
 
-export default function Login() {
+export default function LoginPage() {
   return (
-    <div className="flex justify-center min-h-screen relative"
-         style={{ paddingTop: "var(--spacing-3xl)", 
-                  paddingBottom: "var(--spacing-2xl)" }}>
-      
-      <Toaster
-        containerStyle={{
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          position: "fixed",
-          zIndex: 9999,
-        }}
-        toastOptions={{
-          duration: 4000,
-          style: {
-            minWidth: "320px",
-            maxWidth: "400px",
-            padding: "var(--spacing-md)",
-            borderRadius: "var(--radius-md)",
-            boxShadow: "var(--shadow-lg)",
-          },
-        }}
-      />
-
-      <div>
-        
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
         <LoginForm />
       </div>
+      <UserToastComponent />
     </div>
   );
 }
+

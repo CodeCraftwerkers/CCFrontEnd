@@ -1,4 +1,4 @@
-import "../../App.css";
+import "../App.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +6,8 @@ import { z } from "zod";
 import { Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import { loginToast } from "./LoginToast";
+import axios from "axios";
+import { UserToast } from "./UserToast";
 
 const loginSchema = z.object({
   email: z.string().min(1, "El email es requerido").email("Email inválido"),
@@ -14,11 +15,11 @@ const loginSchema = z.object({
   rememberMe: z.boolean().optional(),
 });
 
-// Usuario simulado (modo demo)
 const fakeUser = { email: "demo@user.com", password: "123456" };
 
 export const LoginForm = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -28,47 +29,47 @@ export const LoginForm = ({ onSuccess }) => {
     defaultValues: { email: "", password: "", rememberMe: false },
   });
 
-  const onSubmit = (data) => {
-    if (data.email === fakeUser.email && data.password === fakeUser.password) {
-      const fakeToken = "fake-jwt-token-123";
-      const storage = data.rememberMe ? localStorage : sessionStorage;
-      storage.setItem("token", fakeToken);
-      loginToast.success("Inicio de sesión exitoso (modo demo)");
-      setTimeout(() => (window.location.href = "/dashboard"), 1000);
-    } else {
-      loginToast.error("Credenciales inválidas (modo demo)");
-    }
+  const onSubmit = async (data) => {
+    try {
+      // === MODO DEMO ===
+      if (data.email === fakeUser.email && data.password === fakeUser.password) {
+        const fakeToken = "fake-jwt-token-123";
+        const storage = data.rememberMe ? localStorage : sessionStorage;
+        storage.setItem("token", fakeToken);
+        UserToast.success("Inicio de sesión exitoso (modo demo)");
+        setTimeout(() => (window.location.href = "/dashboard"), 1000);
+        return;
+      }
 
-    /* === Versión con backend (comentada) ===
-    axios
-      .post("/api/auth/login", data)
-      .then((response) => {
-        loginToast.success("¡Bienvenido de nuevo!");
-        if (response.data.token) {
-          localStorage.setItem("token", response.data.token);
-        }
-        if (onSuccess) onSuccess(response.data);
-      })
-      .catch((error) => {
-        const errorMessage =
-          error.response?.data?.message ||
-          error.message ||
-          "Error al iniciar sesión";
-        loginToast.error(errorMessage);
-      });
-    */
+      // === CÓDIGO REAL BACKEND ===
+      const toastId = UserToast.loading("Iniciando sesión...");
+      const response = await axios.post("/api/auth/login", data);
+
+      UserToast.dismiss(toastId);
+      UserToast.success("Bienvenida de nuevo");
+
+      if (response.data.token) localStorage.setItem("token", response.data.token);
+      if (onSuccess) onSuccess(response.data);
+    } catch (error) {
+      UserToast.dismiss();
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Error al iniciar sesión";
+      UserToast.error(message);
+    }
   };
 
   return (
-    <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg">
-      <h3 className="text-h3 text-center text-primary mb-2">
-          Bienvenida de nuevo
-        </h3>
-        <p className="text-body text-center text-gray-400 mb-6">
-          Inicia sesión para continuar...
-        </p>
+    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 space-y-6">
+      <h2 className="text-2xl font-bold text-gray-800 text-center">
+        Bienvenida de nuevo
+      </h2>
+      <p className="text-center text-gray-500 text-sm">
+        Inicia sesión con tu correo y contraseña
+      </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Email */}
         <div>
           <label
@@ -78,7 +79,7 @@ export const LoginForm = ({ onSuccess }) => {
             Email
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
             <input
               {...register("email")}
               id="email"
@@ -88,8 +89,8 @@ export const LoginForm = ({ onSuccess }) => {
               className={clsx(
                 "block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
                 errors.email
-                  ? "border-(--color-error) focus:ring-(--color-error)/20"
-                  : "border-gray-300 focus:ring-(--color-primary-main)/20"
+                  ? "border-(--color-error) focus:ring-(--color-error)/30"
+                  : "border-gray-300 focus:border-(--color-primary-main) focus:ring-(--color-primary-main)/30"
               )}
             />
           </div>
@@ -109,7 +110,7 @@ export const LoginForm = ({ onSuccess }) => {
             Contraseña
           </label>
           <div className="relative">
-            <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
             <input
               {...register("password")}
               id="password"
@@ -119,19 +120,19 @@ export const LoginForm = ({ onSuccess }) => {
               className={clsx(
                 "block w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 transition",
                 errors.password
-                  ? "border-(--color-error) focus:ring-(--color-error)/20"
-                  : "border-gray-300 focus:ring-(--color-primary-main)/20"
+                  ? "border-(--color-error) focus:ring-(--color-error)/30"
+                  : "border-gray-300 focus:border-(--color-primary-main) focus:ring-(--color-primary-main)/30"
               )}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center"
             >
               {showPassword ? (
-                <EyeOff className="h-5 w-5" />
+                <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
               ) : (
-                <Eye className="h-5 w-5" />
+                <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
               )}
             </button>
           </div>
@@ -148,7 +149,7 @@ export const LoginForm = ({ onSuccess }) => {
             {...register("rememberMe")}
             id="rememberMe"
             type="checkbox"
-            className="h-4 w-4 text-(--color-primary-main) border-gray-300 rounded cursor-pointer"
+            className="h-4 w-4 text-(--color-primary-main) focus:ring-(--color-primary-main) border-gray-300 rounded cursor-pointer"
           />
           <label
             htmlFor="rememberMe"
@@ -161,9 +162,9 @@ export const LoginForm = ({ onSuccess }) => {
         {/* Botón */}
         <button
           type="submit"
-          className="w-full flex justify-center items-center py-3 px-4 rounded-lg text-sm font-medium text-white bg-(--color-primary-main) hover:bg-(--color-primary-dark) shadow-md transition"
+          className="w-full flex justify-center items-center py-3 px-4 rounded-lg shadow-md text-sm font-medium text-white bg-(--color-primary-main) hover:bg-(--color-primary-dark) transition"
         >
-          <LogIn className="w-5 h-5 mr-2" /> Iniciar sesión
+          <LogIn className="w-5 h-5 mr-2" /> Iniciar Sesión
         </button>
 
         {/* Ir a registro */}

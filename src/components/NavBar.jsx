@@ -11,7 +11,7 @@ export default function NavBar() {
         />
 
         <div className="flex items-center gap-3 md:gap-5">
-          <button className="text-gray-800 text-sm md:text-base hover:text-purple-700 transition-colors">
+          <button className="text-gray-800 text-sm md:text-base hover:text-(--color-primary-main) transition-colors">
             Iniciar sesión
           </button>
           <Link to="/register">
