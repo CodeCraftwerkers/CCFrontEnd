@@ -1,18 +1,17 @@
 import { Search } from "lucide-react";
-import { DateFilter } from "./DateFilter"; 
+import { DateFilter } from "./DateFilter";
 
 export const SearchBar = ({
   searchTerm,
   setSearchTerm,
   filterType,
   setFilterType,
-  visibleCount, 
+  visibleCount,
   dateFilter,
-  setDateFilter
-  }) => {
+  setDateFilter,
+}) => {
   return (
     <section className="bg-white rounded-xl shadow-sm p-6 mb-8">
-      {/*Campo de búsqueda */}
       <div className="relative mb-5">
         <Search
           className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -27,7 +26,6 @@ export const SearchBar = ({
         />
       </div>
 
-      {/* Filtro (Todos / Online / Presencial) */}
       <div className="flex flex-wrap gap-2 mb-5">
         {["all", "online", "presencial"].map((type) => (
           <button
@@ -47,11 +45,10 @@ export const SearchBar = ({
           </button>
         ))}
       </div>
-       {/* Filtros inferiores (Mostrando X eventos / Filtro de fecha) */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm text-gray-600">
-         <p>Mostrando {visibleCount} evento{visibleCount !== 1 && "s"}</p>
 
-          <DateFilter dateFilter={dateFilter} setDateFilter={setDateFilter} />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm text-gray-600">
+        <p>Mostrando {visibleCount} evento{visibleCount !== 1 && "s"}</p>
+        <DateFilter dateFilter={dateFilter} setDateFilter={setDateFilter} />
       </div>
     </section>
   );
