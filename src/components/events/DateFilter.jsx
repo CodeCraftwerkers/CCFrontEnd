@@ -1,21 +1,17 @@
+
 export const DateFilter = ({ dateFilter, setDateFilter }) => {
   return (
-    <div className="flex items-center gap-2">
-      <label
-        htmlFor="dateFilter"
-        className="text-gray-700 font-medium text-sm"
-      >
-        Mostrar:
-      </label>
+    <div className="relative">
       <select
-        id="dateFilter"
         value={dateFilter}
         onChange={(e) => setDateFilter(e.target.value)}
-        className="border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm">
-        <option value="today">Hoy</option>
-        <option value="week">Esta semana</option>
-        <option value="month">Este mes</option>
-        <option value="all">Todos</option>
+        className="block w-full sm:w-48 px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+        aria-label="Filtrar eventos por fecha"
+      >
+        <option value="ALL">Todas las fechas</option>
+        <option value="TODAY">Hoy</option>
+        <option value="WEEK">Esta semana</option>
+        <option value="MONTH">Este mes</option>
       </select>
     </div>
   );
