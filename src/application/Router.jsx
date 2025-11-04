@@ -5,6 +5,7 @@ import Login from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import EventsPage from "../pages/EventsPage";
 import UsersPage from "../pages/UsersPage";
+import ProfilePage from "../pages/ProfilePage";
 
 export default function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export default function AppRouter() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/events" element={<EventsPage />} />
       <Route path="/users" element={<UsersPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   );
 }
