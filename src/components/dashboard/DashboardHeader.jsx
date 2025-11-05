@@ -1,19 +1,20 @@
 import { Link } from "react-router-dom";
 import { Bell, Menu } from "lucide-react";
-import logo from "../../assets/img/LogoGradient_NaranjaButano.png"; 
+import logo from "../../assets/img/LogoGradient_NaranjaButano.png";
 
 export default function DashboardHeader() {
   return (
-    <header className="w-full fixed top-0 left-0 bg-white shadow-md z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 h-[70px]">
-
+    <header className="w-full sticky top-0 left-0 bg-white shadow-md z-50">
+      {/* ✅ Se quitó max-w-7xl mx-auto para que use todo el ancho */}
+      <div className="flex items-center justify-between px-6 md:px-10 h-20">
         <Link to="/" className="flex items-center gap-2">
           <img
             src={logo}
             alt="Code Crafters Logo"
-            className="h-10 md:h-20 object-contain"
+            className="h-10 md:h-16 object-contain"
           />
-          </Link>
+        </Link>
+
         <div className="flex items-center gap-5">
           <button
             type="button"
@@ -21,16 +22,13 @@ export default function DashboardHeader() {
             aria-label="Notifications"
           >
             <Bell size={22} />
-            {/* Punto indicador de notificación */}
             <span className="absolute top-0 right-0 block h-2.5 w-2.5 ring-white"></span>
           </button>
 
-          {/* Avatar del usuario */}
           <div className="flex items-center justify-center h-9 w-9 rounded-full bg-linear-to-br from-orange-600 via-orange-500 to-red-500 text-white font-semibold">
             JD
           </div>
 
-          {/* Menú hamburguesa */}
           <button
             type="button"
             aria-label="Open menu"

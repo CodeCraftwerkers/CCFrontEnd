@@ -54,3 +54,4 @@ export const mockEvents = [
         tags: ["AI", "Python", "ML"],
     },
     ];
+export default mockEvents;

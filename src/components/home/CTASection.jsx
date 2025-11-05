@@ -4,7 +4,7 @@ import { UserPlus, CalendarDays, Users } from "lucide-react";
 export default function CTASection() {
   const navigate = useNavigate();
 
-  const handleRegister = () => navigate("/register");
+  const handleRegister = () => navigate("/login");
 
   return (
     <section
