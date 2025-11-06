@@ -145,6 +145,7 @@ npm install
 # 4. Iniciar el servidor de desarrollo
 npm run dev
 
+```
 
 ## 👩‍💻 Contactos
 
