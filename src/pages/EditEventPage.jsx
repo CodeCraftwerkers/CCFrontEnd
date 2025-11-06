@@ -168,21 +168,21 @@ export default function EditEventPage() {
             <button
               type="button"
               onClick={() => setShowConfirm(true)}
-              className="px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition"
+              className="px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition cursor-pointer"
             >
               Eliminar evento
             </button>``
             <div className="flex gap-4">
               <button
                 type="button"
-                onClick={() => navigate(`/events/${id}`)}
-                className="px-6 py-3 rounded-lg bg-gray-300 text-gray-700 font-semibold"
+                onClick={() => navigate(`/profile`)}
+                className="px-6 py-3 rounded-lg bg-gray-300 text-gray-700 font-semibold cursor-pointer hover:bg-gray-400 transition"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition"
+                className="px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition cursor-pointer"
               >
                 Guardar cambios
               </button>
