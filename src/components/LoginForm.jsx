@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import axios from "axios";
 import { UserToast } from "./UserToast";
+import { useUser } from "../context/UserContext";
 
 const loginSchema = z.object({
   email: z.string().min(1, "El email es requerido").email("Email inválido"),
@@ -19,6 +20,7 @@ const loginSchema = z.object({
 export const LoginForm = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { login } = useUser();
 
 
   const {
@@ -45,12 +47,12 @@ export const LoginForm = ({ onSuccess }) => {
       }
 
       const token = response.headers["authorization"];
-      if (!token) return UserToast.error("Servidor no retornou token");
+      if (!token) return UserToast.error("El servidor no autoriza");
 
-      localStorage.setItem("token", token);
-      UserToast.success("Bienvenida de nuevo");
-      setTimeout(() => { navigate("/profile") }, 1000);
-
+      login(token);
+      UserToast.success("Ya estás dentro");
+      setTimeout(() =>navigate("/profile"), 1000);
+      
       if (onSuccess) onSuccess();
     } catch (error) {
       UserToast.dismiss();

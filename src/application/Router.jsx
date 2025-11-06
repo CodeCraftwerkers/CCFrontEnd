@@ -18,7 +18,7 @@ export default function AppRouter() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/events" element={<EventsPage />} />
       <Route path="/events/:id" element={<EventDetailsPage />} />
-      <Route path="/events/:id/edit" element={<EditEventPage />} />
+      <Route path="/events/edit/:id" element={<EditEventPage />} />
       <Route path="/users" element={<UsersPage />} />
       <Route path="/profile" element={<ProfilePage />} />
     </Routes>
