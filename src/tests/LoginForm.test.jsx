@@ -4,7 +4,6 @@ import { LoginForm } from "../components/LoginForm";
 import { MemoryRouter } from "react-router-dom";
 import axios from "axios";
 
-// Mocks
 vi.mock("axios");
 vi.mock("../components/UserToast", () => ({
   UserToast: {

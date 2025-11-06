@@ -50,10 +50,11 @@ export default function EditProfileModal({ user, onClose, onSuccess }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
               Nombre de usuario
             </label>
             <input
+              id="username"
               type="text"
               name="username"
               value={formData.username}
@@ -64,10 +65,11 @@ export default function EditProfileModal({ user, onClose, onSuccess }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Correo electrónico
             </label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}

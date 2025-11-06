@@ -37,3 +37,32 @@ export const getEventsByUsername = async (username) => {
   const response = await axios.get(`${BASE_URL}/events/filter?username=${username}`);
   return response.data.content || response.data;
 };
+
+export async function getEventsCreatedByUser() {
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) throw new Error("No hay token guardado.");
+
+  const response = await fetch("http://localhost:8080/api/v1/events/created", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: No se pudieron obtener los eventos creados`);
+  }
+
+  const data = await response.json();
+  return data.content || data;
+};
+
+export const getEventsUserJoined = async () => {
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) throw new Error("No se encontró token.");
+  const response = await axios.get(`${BASE_URL}/events/joined`, {
+    headers: { Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json" },
+  });
+  return response.data.content || response.data;
+};
