@@ -87,7 +87,7 @@ export const updateEvent = async (id, eventData) => {
   return await response.json();
 };
 
-// ✅ NUEVO: eliminar evento
+// x eliminar evento
 export const deleteEvent = async (id) => {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) throw new Error("No se encontró token.");
@@ -105,4 +105,43 @@ export const deleteEvent = async (id) => {
   }
 
   return true;
+};
+// x Apuntarse a un evento
+export const signUpToEvent = async (eventId, userId) => {
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) throw new Error("No se encontró token.");
+
+  const response = await fetch(`${BASE_URL}/events/${eventId}/signup/${userId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: No se pudo apuntar al evento`);
+  }
+
+  return await response.json();
+};
+
+// x Desapuntarse de un evento
+export const unSignFromEvent = async (eventId, userId) => {
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) throw new Error("No se encontró token.");
+
+  const response = await fetch(`${BASE_URL}/events/${eventId}/signup/${userId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: No se pudo desapuntar del evento`);
+  }
+
+  return await response.json();
 };
