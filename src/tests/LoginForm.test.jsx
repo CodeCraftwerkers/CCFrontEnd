@@ -5,13 +5,21 @@ import { MemoryRouter } from "react-router-dom";
 import axios from "axios";
 
 vi.mock("axios");
+
 vi.mock("../components/UserToast", () => ({
   UserToast: {
-    loading: vi.fn(),
+    loading: vi.fn(() => "toast-id"),
     dismiss: vi.fn(),
     success: vi.fn(),
     error: vi.fn(),
   },
+}));
+
+
+vi.mock("../context/UserContext", () => ({
+  useUser: vi.fn(() => ({
+    login: vi.fn(),
+  })),
 }));
 
 describe("LoginForm", () => {
@@ -79,7 +87,10 @@ describe("LoginForm", () => {
           password: "123456",
           rememberMe: false,
         },
-        expect.any(Object)
+        expect.objectContaining({
+          headers: { "Content-Type": "application/json" },
+          validateStatus: expect.any(Function),
+        })
       );
     });
   });
