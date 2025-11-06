@@ -1,6 +1,7 @@
 import { Calendar, Users } from "lucide-react";
 
 export const EventCard = ({ event, isJoined, toggleJoinEvent }) => {
+  if (!event) return null;
 
   const formattedDate = new Date(event.startDateTime).toLocaleDateString("es-ES", {
     day: "2-digit",
@@ -43,22 +44,22 @@ export const EventCard = ({ event, isJoined, toggleJoinEvent }) => {
                 : "bg-green-600 text-white"
             }`}
           >
-            {event.category === "ONLINE" ? "🌐 ONLINE" : "📍 PRESENCIAL"}
+            {event.category === "ONLINE" ? "ONLINE" : "PRESENCIAL"}
           </span>
         </div>
+
         <h3
           id={`event-${event.id}-title`}
           className="text-lg font-semibold text-gray-900 mb-1"
         >
           {event.title}
         </h3>
-
-       {event.organizer && (
-          <p className="text-sm text-gray-600 mb-3">Por {event.organizer}</p>
+            
+       {event.user && (
+          <p className="text-sm text-gray-600 mb-3">Por {event.user.username}</p>
         )}
 
-        {/* Tags */}
-        {event.tags && event.tags.length > 0 && (
+            {event.tags && event.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
             {event.tags.map((tag, idx) => (
               <span
@@ -75,7 +76,7 @@ export const EventCard = ({ event, isJoined, toggleJoinEvent }) => {
             <div className="flex items-center">
               <Users size={16} className="mr-1" aria-hidden="true" />
               <span>
-                {event.attendees}/{event.maxAttendees} asistentes
+                {(event.attendees?.lengh || 0)}/{event.maxAttendees} asistentes
               </span>
             </div>
           </div>
