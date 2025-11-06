@@ -2,10 +2,12 @@ import NavBar from "../components/NavBar.jsx";
 import Footer from "../components/Footer.jsx";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../services/ApiUser.jsx";
+import EditProfileModal from "../components/dashboard/EditProfileModal.jsx";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [showEdit, setShowEdit] = useState(false);
 
   useEffect(() => {
     getCurrentUser()
@@ -60,10 +62,10 @@ export default function ProfilePage() {
           </div>
 
           <h1 className="text-2xl font-bold text-gray-800 mt-4">
-            {user.name}
+            {user.username}
           </h1>
 
-          <p className="text-gray-600">{user.role}</p>
+          <p className="text-gray-600">{user.email}</p>
 
           <div className="flex justify-center gap-6 mt-4 text-sm text-gray-600">
             <span>{user.createdEvents} eventos creados</span>
@@ -71,10 +73,20 @@ export default function ProfilePage() {
             <span>{user.connections} conexiones</span>
           </div>
 
-          <button className="mt-5 px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition">
+          <button
+          onClick={() => setShowEdit(true)}
+          className="mt-5 px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition cursor-pointer">
             Editar perfil
           </button>
         </section>
+
+        {showEdit && (
+          <EditProfileModal
+            user={user}
+            onClose={() => setShowEdit(false)}
+            onSuccess={(updated) => setUser(updated)}
+          />
+        )}
 
         <div className="max-w-4xl w-full mt-10">
           <div className="flex gap-6 border-b pb-2 text-gray-700 font-medium">
@@ -85,8 +97,18 @@ export default function ProfilePage() {
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6 mt-6 text-gray-400 text-center">
-            Aquí aparecerán tus eventos
-          </div>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Tus eventos creados</h2>
+            {user.createdEvents && user.createdEvents.length > 0 ? (
+              <ul className="space-y-2">
+                {user.createdEvents.map((ev) => (
+                  <li key={ev.id} className="border-b pb-2">
+                    <strong>{ev.title}</strong> — {new Date(ev.startDateTime).toLocaleDateString()}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500">Aún no has creado eventos.</p>
+            )}          </div>
         </div>
       </main>
       <Footer />
