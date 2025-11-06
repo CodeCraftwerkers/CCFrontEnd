@@ -50,8 +50,9 @@ const RegisterForm = () => {
         </h2>
 
         
-        <label className="block text-sm mb-1 text-gray-600">Nombre</label>
+        <label htmlFor="username" className="block text-sm mb-1 text-gray-600">Nombre</label>
         <input
+          id="username"
           type="text"
           name="username"
           value={form.username}
@@ -61,8 +62,9 @@ const RegisterForm = () => {
         />
 
         
-        <label className="block text-sm mb-1 text-gray-600">Email</label>
+        <label htmlFor="email" className="block text-sm mb-1 text-gray-600">Email</label>
         <input
+          id="email"
           type="email"
           name="email"
           value={form.email}
@@ -72,8 +74,9 @@ const RegisterForm = () => {
         />
 
         
-        <label className="block text-sm mb-1 text-gray-600">Contraseña</label>
+        <label htmlFor="password" className="block text-sm mb-1 text-gray-600">Contraseña</label>
         <input
+          id="password"
           type="password"
           name="password"
           value={form.password}
