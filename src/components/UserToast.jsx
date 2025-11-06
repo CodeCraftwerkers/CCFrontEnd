@@ -1,7 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 
-// Componente visual que se renderiza una sola vez en el árbol
 export function UserToastComponent() {
   return (
     <Toaster
@@ -26,7 +25,6 @@ export function UserToastComponent() {
   );
 }
 
-// Objeto que contiene los métodos de toast para usar en cualquier componente
 export const UserToast = {
   success: (message = "¡Operación exitosa!") =>
     toast.success(message, {

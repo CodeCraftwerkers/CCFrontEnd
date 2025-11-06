@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const RegisterForm = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -17,7 +17,7 @@ const RegisterForm = () => {
 
     try {
       
-      const response = await fetch("http://localhost:8080/api/auth/register", {
+      const response = await fetch("http://localhost:8080/api/v1/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -29,8 +29,11 @@ const RegisterForm = () => {
         throw new Error(data.message || "Error al registrarse");
       }
 
-      setMessage("✅ Registro exitoso");
-      setForm({ name: "", email: "", password: "" });
+      setMessage("Registro exitoso");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1200);
+      setForm({ username: "", email: "", password: "" });
     } catch (err) {
       setError(err.message);
     }
@@ -50,8 +53,8 @@ const RegisterForm = () => {
         <label className="block text-sm mb-1 text-gray-600">Nombre</label>
         <input
           type="text"
-          name="name"
-          value={form.name}
+          name="username"
+          value={form.username}
           onChange={handleChange}
           required
           className="w-full p-2 border border-gray-300 rounded-md mb-3 focus:ring-2 focus:ring-red-300 focus:outline-none"
