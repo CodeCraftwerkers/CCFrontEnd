@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 import { SearchBar } from "../components/events/SearchBar";
 import { EventCard } from "../components/events/EventCard";
 import { EventsTabs } from "../components/events/EventsTabs";
-//import { mockEvents } from "../data/mockEvents";
-//import axios from "axios";  //Para usar la API real. 
-import { getAllEvents, getEventsByCategory, getEventsByDateRange, getEventsByTitle, getEventsByUsername } from "../services/ApiEvent";
+import {
+  getAllEvents,
+  getEventsByCategory,
+  getEventsByDateRange,
+  getEventsByTitle,
+  getEventsByUsername,
+} from "../services/ApiEvent";
 
 export default function EventsPage() {
   const [events, setEvents] = useState([]);
@@ -16,68 +20,44 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  //useEffect(() => {
-  // Simulación temporal de datos (futura llamada a API)
-  //setEvents(mockEvents);
-  // }, []);
-  //Luego cambiamos esto por la búsqueda real, chicas, la pongo más abajo "comentada"
+  const searchTimeout = useRef(null); // ⏱️ para el debounce
 
-
-
+  // ✅ Filtrado local inmediato
   const filteredEvents = events.filter((event) => {
-   const search = searchTerm.toLowerCase();
+    const search = searchTerm.toLowerCase();
 
-   const matchesSearch =
-     event.title.toLowerCase().includes(search) ||
-     event.description.toLowerCase().includes(search) ||
-     (event.tags && event.tags.some((tag) => tag.toLowerCase().includes(search)));
+    const matchesSearch =
+      event.title.toLowerCase().includes(search) ||
+      event.description.toLowerCase().includes(search) ||
+      (event.user?.username &&
+        event.user.username.toLowerCase().includes(search)) ||
+      (event.tags && event.tags.some((tag) => tag.toLowerCase().includes(search)));
 
-   const matchesType =
-     filterType === "ALL" || event.category === filterType;
+    const matchesType =
+      filterType === "ALL" || event.category === filterType;
 
-   const eventDate = new Date(event.startDateTime);
-   const today = new Date();
+    const eventDate = new Date(event.startDateTime);
+    const today = new Date();
 
-   const matchesDate =
-     dateFilter === "ALL" ||
-     (dateFilter === "TODAY" &&
-       eventDate.toDateString() === today.toDateString()) ||
-     (dateFilter === "WEEK" &&
-       eventDate >= today &&
-       eventDate <= new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7)) ||
-     (dateFilter === "MONTH" &&
-       eventDate.getMonth() === today.getMonth() &&
-       eventDate.getFullYear() === today.getFullYear());
+    const matchesDate =
+      dateFilter === "ALL" ||
+      (dateFilter === "TODAY" &&
+        eventDate.toDateString() === today.toDateString()) ||
+      (dateFilter === "WEEK" &&
+        eventDate >= today &&
+        eventDate <= new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate() + 7
+        )) ||
+      (dateFilter === "MONTH" &&
+        eventDate.getMonth() === today.getMonth() &&
+        eventDate.getFullYear() === today.getFullYear());
 
-   return matchesSearch && matchesType && matchesDate;
-}); 
+    return matchesSearch && matchesType && matchesDate;
+  });
 
-  /* 
-  
-  useEffect(() => {
-    const fetchFilteredEvents = async () => {
-      try {
-        const BASE_URL = "http://localhost:8080/api/v1"; 
-        let endpoint = `${BASE_URL}/events/filter?`;
-
-        if (filterType !== "ALL") {
-          endpoint += `category=${filterType}`;
-        } else if (dateFilter !== "ALL") {
-          endpoint += `timeRange=${dateFilter.toLowerCase()}`;
-        } else if (searchTerm.trim() !== "") {
-          endpoint += `title=${encodeURIComponent(searchTerm)}`;
-        }
-
-        const { data } = await axios.get(endpoint);
-        setEvents(data);
-      } catch (error) {
-        console.error("Error al obtener los eventos filtrados:", error);
-      }
-    };
-
-    fetchFilteredEvents();
-  }, [filterType, dateFilter, searchTerm]); */
-
+  // ✅ Llamada al backend (con debounce)
   const fetchEvents = async () => {
     setLoading(true);
     setError("");
@@ -90,15 +70,29 @@ export default function EventsPage() {
       } else if (dateFilter !== "ALL") {
         data = await getEventsByDateRange(dateFilter.toLowerCase());
       } else if (searchTerm.trim() !== "") {
+        // Buscar primero por título
         data = await getEventsByTitle(searchTerm);
+
+        const isEmpty =
+          !data ||
+          (Array.isArray(data) && data.length === 0) ||
+          (data.content && data.content.length === 0);
+
+        // Si no encuentra nada, buscar por organizador (username)
+        if (isEmpty) {
+          console.log("Buscando por usuario:", searchTerm);
+          data = await getEventsByUsername(searchTerm);
+        }
       } else {
         data = await getAllEvents();
       }
 
-      const eventsArray = Array.isArray(data) ? data : data.content || [];
-      console.log("Eventos carregados do backend:", eventsArray);
+      const eventsArray = Array.isArray(data)
+        ? data
+        : data.content || [];
 
-      setEvents(data);
+      console.log("Eventos cargados del backend:", eventsArray);
+      setEvents(eventsArray);
     } catch (err) {
       console.error("Error al obtener los eventos:", err);
       setError("No se pudieron cargar los eventos");
@@ -107,16 +101,30 @@ export default function EventsPage() {
     }
   };
 
+  // ✅ Actualizar eventos al cambiar filtros o después del debounce
   useEffect(() => {
-    fetchEvents();
+    clearTimeout(searchTimeout.current);
+
+    searchTimeout.current = setTimeout(() => {
+      fetchEvents();
+    }, 1000); // Espera 1 segundo desde la última tecla
+
+    return () => clearTimeout(searchTimeout.current);
   }, [filterType, dateFilter, searchTerm]);
 
- // Simulación temporal del estado de autenticaciónn
-  const isLoggedIn = false; // Cambiar a true para probar la vista del dashboard
+  // ✅ Permitir buscar al presionar Enter
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      clearTimeout(searchTimeout.current);
+      fetchEvents();
+    }
+  };
+
+  const isLoggedIn = false; // Cambiar a true si el usuario está logueado
 
   return (
     <>
-      {/* Mostrar header del dashboard solo si el usuario está logueado */}
       {isLoggedIn && <DashboardHeader />}
 
       <main
@@ -125,33 +133,33 @@ export default function EventsPage() {
         } pb-16 bg-gray-50 min-h-screen`}
       >
         <div className="max-w-6xl mx-auto">
-          {/* Mostrar filtros y tabs solo para usuarios logueados */}
-          {isLoggedIn && (
-            <>
-              <SearchBar
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                filterType={filterType}
-                setFilterType={setFilterType}
-                visibleCount={filteredEvents.length}
-                dateFilter={dateFilter}
-                setDateFilter={setDateFilter}
-              />
+          {/* 🔍 SearchBar siempre visible */}
+          <div onKeyDown={handleKeyDown}>
+            <SearchBar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              filterType={filterType}
+              setFilterType={setFilterType}
+              visibleCount={filteredEvents.length}
+              dateFilter={dateFilter}
+              setDateFilter={setDateFilter}
+            />
+          </div>
 
-              <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-            </>
+          {/* Tabs solo para usuarios logueados */}
+          {isLoggedIn && (
+            <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
           )}
 
-          {/* Todos los usuarios ven los eventos */}
+          {/* 🧩 Lista de eventos */}
           <section className="grid grid-cols-1 gap-8 mt-8 max-w-4xl mx-auto">
-            {filteredEvents.length > 0 ? (
+            {loading ? (
+              <p className="text-center text-gray-500">Cargando eventos...</p>
+            ) : error ? (
+              <p className="text-center text-red-500">{error}</p>
+            ) : filteredEvents.length > 0 ? (
               filteredEvents.map((event) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  toggleJoinEvent={() => {}}
-                  joinedEvents={[]}
-                />
+                <EventCard key={event.id} event={event} />
               ))
             ) : (
               <p className="col-span-full text-center text-gray-500">

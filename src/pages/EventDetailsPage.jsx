@@ -1,31 +1,77 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { CalendarDays, Users } from "lucide-react";
-import mockEvents from "../data/mockEvents";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
+import { getEventById } from "../services/ApiEvent";
+import { getCurrentUser } from "../services/ApiUser";
 
 export default function EventDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Buscar evento simulado
-  const event = mockEvents.find((ev) => ev.id === parseInt(id));
+  const [event, setEvent] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  if (!event) {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [eventData, userData] = await Promise.all([
+          getEventById(id),
+          getCurrentUser(),
+        ]);
+        setEvent(eventData);
+        setCurrentUser(userData);
+      } catch (err) {
+        console.error("Error al cargar evento:", err);
+        setError("No se pudo cargar la información del evento.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const handleBackToProfile = () => navigate("/profile");
+
+  if (loading) {
     return (
-      <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <h2 className="text-2xl font-bold text-gray-700">
-          No se encontró el evento solicitado.
-        </h2>
+      <main className="flex flex-col justify-center items-center min-h-screen text-gray-600">
+        <p className="text-lg">Cargando evento...</p>
       </main>
     );
   }
 
-  const handleEdit = () => navigate(`/events/${id}`);
-  const handleBackToEvents = () => navigate("/events");
+  if (error || !event) {
+    return (
+      <main className="flex flex-col justify-center items-center min-h-screen text-gray-600">
+        <h2 className="text-2xl font-bold text-red-500 mb-2">Error</h2>
+        <p>{error || "No se encontró el evento solicitado."}</p>
+        <button
+          onClick={handleBackToProfile}
+          className="mt-4 px-6 py-3 rounded-lg border-2 border-orange-500 text-orange-600 font-semibold hover:bg-orange-50 transition"
+        >
+          Volver al perfil
+        </button>
+      </main>
+    );
+  }
+
+  const formattedDate = new Date(event.startDateTime).toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+  const formattedTime = new Date(event.startDateTime).toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const isCreator = currentUser && event.user && currentUser.username === event.user.username;
 
   return (
     <>
-      {/* === Header fijo del dashboard === */}
       <DashboardHeader />
 
       <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 pt-20 bg-gray-100 min-h-screen">
@@ -34,11 +80,20 @@ export default function EventDetailsPage() {
           <div className="flex-1 space-y-6">
             <h1 className="text-3xl font-bold text-gray-800">{event.title}</h1>
             <p className="text-lg text-gray-600">
-              Por <span className="font-semibold">@{event.creator}</span>
+              Organizado por{" "}
+              <span className="font-semibold text-orange-600">
+                @{event.user?.username || "Desconocido"}
+              </span>
             </p>
 
             <div className="flex gap-3">
-              <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-medium">
+              <span
+                className={`px-4 py-1 rounded-full text-sm font-medium ${
+                  event.category === "ONLINE"
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-green-100 text-green-700"
+                }`}
+              >
                 {event.category}
               </span>
             </div>
@@ -47,13 +102,13 @@ export default function EventDetailsPage() {
               <div className="flex items-center gap-2">
                 <CalendarDays size={20} />
                 <span>
-                  {event.date} • {event.time}
+                  {formattedDate} • {formattedTime}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Users size={20} />
                 <span>
-                  {event.attendees}/{event.maxAttendees} asistentes
+                  {(event.attendees?.length || 0)}/{event.maxAttendees} asistentes
                 </span>
               </div>
             </div>
@@ -63,17 +118,28 @@ export default function EventDetailsPage() {
                 Descripción del evento
               </h2>
               <p className="text-gray-600 whitespace-pre-line">
-                {event.description}
+                {event.description || "Sin descripción disponible."}
               </p>
             </div>
 
-            {/* === Botón editar === */}
-            <button
-              onClick={() => navigate(`/events/${id}/edit`)}
-              className="mt-4 px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition"
-            >
-              Editar evento
-            </button>
+            {/* Botones */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+              {isCreator && (
+                <button
+                  onClick={() => navigate(`/events/edit/${id}`)}
+                  className="px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition"
+                >
+                  Editar evento
+                </button>
+              )}
+
+              <button
+                onClick={handleBackToProfile}
+                className="px-6 py-3 rounded-lg border-2 border-orange-500 text-orange-600 font-semibold hover:bg-orange-50 transition"
+              >
+                Volver a mis eventos
+              </button>
+            </div>
           </div>
 
           {/* Columna derecha: imagen */}
@@ -85,16 +151,6 @@ export default function EventDetailsPage() {
             />
           </div>
         </section>
-
-        {/* === Botón Volver a mis eventos === */}
-        <div className="mt-12 text-center">
-          <button
-            onClick={handleBackToEvents}
-            className="px-8 py-3 rounded-lg border-2 border-orange-500 text-orange-600 font-semibold hover:bg-orange-50 transition"
-          >
-            Volver a mis eventos
-          </button>
-        </div>
       </main>
     </>
   );
