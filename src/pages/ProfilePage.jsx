@@ -2,10 +2,13 @@ import NavBar from "../components/NavBar.jsx";
 import Footer from "../components/Footer.jsx";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../services/ApiUser.jsx";
+import { getEventsCreatedByUser } from "../services/ApiEvent.jsx";
+import { getEventsUserJoined } from "../services/ApiEvent.jsx";
 import EditProfileModal from "../components/dashboard/EditProfileModal.jsx";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
+  const [createdEvents, setCreatedEvents] = useState([]);
   const [error, setError] = useState(null);
   const [showEdit, setShowEdit] = useState(false);
 
@@ -14,6 +17,10 @@ export default function ProfilePage() {
       .then((data) => {
         console.log("Usuario cargado:", data);
         setUser(data);
+        return Promise.all([getEventsCreatedByUser(), getEventsUserJoined()]);
+      })
+      .then(([created, joined]) => {     
+        setCreatedEvents(created);
       })
       .catch((err) => {
         console.error(err);
@@ -58,7 +65,6 @@ export default function ProfilePage() {
       <main className="min-h-screen bg-gray-100 pt-28 pb-10 flex flex-col items-center">
         <section className="bg-white w-full max-w-4xl rounded-xl shadow-md p-8 text-center">
           <div className="w-24 h-24 mx-auto bg-orange-500 flex items-center justify-center text-white font-bold text-2xl rounded-full">
-            {user.initials}
           </div>
 
           <h1 className="text-2xl font-bold text-gray-800 mt-4">
@@ -68,14 +74,13 @@ export default function ProfilePage() {
           <p className="text-gray-600">{user.email}</p>
 
           <div className="flex justify-center gap-6 mt-4 text-sm text-gray-600">
-            <span>{user.createdEvents} eventos creados</span>
+            <span>{createdEvents.length} eventos creados</span>
             <span>{user.joinedEvents} eventos apuntada</span>
-            <span>{user.connections} conexiones</span>
           </div>
 
           <button
-          onClick={() => setShowEdit(true)}
-          className="mt-5 px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition cursor-pointer">
+            onClick={() => setShowEdit(true)}
+            className="mt-5 px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition cursor-pointer">
             Editar perfil
           </button>
         </section>
@@ -98,11 +103,12 @@ export default function ProfilePage() {
 
           <div className="bg-white rounded-xl shadow-md p-6 mt-6 text-gray-400 text-center">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Tus eventos creados</h2>
-            {user.createdEvents && user.createdEvents.length > 0 ? (
-              <ul className="space-y-2">
-                {user.createdEvents.map((ev) => (
+            {createdEvents.length > 0 ? (
+              <ul className="space-y-2 text-left">
+                {createdEvents.map((ev) => (
                   <li key={ev.id} className="border-b pb-2">
-                    <strong>{ev.title}</strong> — {new Date(ev.startDateTime).toLocaleDateString()}
+                    <strong>{ev.title}</strong> —{" "}
+                    {new Date(ev.startDateTime).toLocaleDateString("es-ES")}
                   </li>
                 ))}
               </ul>
