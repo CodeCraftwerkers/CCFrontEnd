@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
+const BASE_URL = import.meta.env.VITE_API_URL?.trim() || "http://localhost:8080/api/v1";
 
 // Todos los eventos
 export const getAllEvents = async () => {
   const response = await axios.get(`${BASE_URL}/events`);
-  return response.data;
+  return response.data.content || response.data;
 };
 
 // Por ID
@@ -17,23 +17,23 @@ export const getEventById = async (id) => {
 // X categoría (ONLINE / PRESENCIAL)
 export const getEventsByCategory = async (category) => {
   const response = await axios.get(`${BASE_URL}/events/filter?category=${category}`);
-  return response.data;
+  return response.data.content || response.data;
 };
 
 // x fecha (today / week / month)
 export const getEventsByDateRange = async (range) => {
   const response = await axios.get(`${BASE_URL}/events/filter?timeRange=${range}`);
-  return response.data;
+  return response.data.content || response.data;
 };
 
 // x Filtrar por título
 export const getEventsByTitle = async (title) => {
   const response = await axios.get(`${BASE_URL}/events/filter?title=${encodeURIComponent(title)}`);
-  return response.data;
+  return response.data.content || response.data;
 };
 
 // x Usuario
 export const getEventsByUsername = async (username) => {
   const response = await axios.get(`${BASE_URL}/events/filter?username=${username}`);
-  return response.data;
+  return response.data.content || response.data;
 };

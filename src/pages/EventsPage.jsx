@@ -3,8 +3,9 @@ import DashboardHeader from "../components/dashboard/DashboardHeader";
 import { SearchBar } from "../components/events/SearchBar";
 import { EventCard } from "../components/events/EventCard";
 import { EventsTabs } from "../components/events/EventsTabs";
-import mockEvents from "../data/mockEvents"; 
-// import axios from "axios"; // Para usar la API real más adelante
+//import { mockEvents } from "../data/mockEvents";
+//import axios from "axios";  //Para usar la API real. 
+import { getAllEvents, getEventsByCategory, getEventsByDateRange, getEventsByTitle, getEventsByUsername } from "../services/ApiEvent";
 
 export default function EventsPage() {
   const [events, setEvents] = useState([]);
@@ -12,50 +13,46 @@ export default function EventsPage() {
   const [filterType, setFilterType] = useState("ALL");
   const [dateFilter, setDateFilter] = useState("ALL");
   const [activeTab, setActiveTab] = useState("joined");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    // datos simulados por ahora
-    setEvents(mockEvents);
-  }, []);
+  //useEffect(() => {
+  // Simulación temporal de datos (futura llamada a API)
+  //setEvents(mockEvents);
+  // }, []);
+  //Luego cambiamos esto por la búsqueda real, chicas, la pongo más abajo "comentada"
 
-  // Filtro temporal de eventos
+
+
   const filteredEvents = events.filter((event) => {
-    const search = searchTerm.toLowerCase();
+   const search = searchTerm.toLowerCase();
 
-    const matchesSearch =
-      event.title.toLowerCase().includes(search) ||
-      event.description.toLowerCase().includes(search) ||
-      (event.tags && event.tags.some((tag) => tag.toLowerCase().includes(search)));
+   const matchesSearch =
+     event.title.toLowerCase().includes(search) ||
+     event.description.toLowerCase().includes(search) ||
+     (event.tags && event.tags.some((tag) => tag.toLowerCase().includes(search)));
 
-    const matchesType = filterType === "ALL" || event.category === filterType;
+   const matchesType =
+     filterType === "ALL" || event.category === filterType;
 
-    const eventDate = new Date(event.startDateTime);
-    const today = new Date();
+   const eventDate = new Date(event.startDateTime);
+   const today = new Date();
 
-    const matchesDate =
-      dateFilter === "ALL" ||
-      (dateFilter === "TODAY" && eventDate.toDateString() === today.toDateString()) ||
-      (dateFilter === "WEEK" &&
-        eventDate >= today &&
-        eventDate <= new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7)) ||
-      (dateFilter === "MONTH" &&
-        eventDate.getMonth() === today.getMonth() &&
-        eventDate.getFullYear() === today.getFullYear());
+   const matchesDate =
+     dateFilter === "ALL" ||
+     (dateFilter === "TODAY" &&
+       eventDate.toDateString() === today.toDateString()) ||
+     (dateFilter === "WEEK" &&
+       eventDate >= today &&
+       eventDate <= new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7)) ||
+     (dateFilter === "MONTH" &&
+       eventDate.getMonth() === today.getMonth() &&
+       eventDate.getFullYear() === today.getFullYear());
 
-    return matchesSearch && matchesType && matchesDate;
-  });
+   return matchesSearch && matchesType && matchesDate;
+}); 
 
   /* 
-     Endpoints disponibles para integrar con el backend:
-      - GET /events/filter?timeRange=today
-      - GET /events/filter?timeRange=week
-      - GET /events/filter?timeRange=month
-      - GET /events/filter?category=ONLINE
-      - GET /events/filter?category=PRESENCIAL
-      - GET /events/filter?username=Alexandra
-      - GET /events/filter?title=Java
-
-    Implementación para pruebas reales (comentada hasta usar API):
   
   useEffect(() => {
     const fetchFilteredEvents = async () => {
@@ -79,10 +76,42 @@ export default function EventsPage() {
     };
 
     fetchFilteredEvents();
-  }, [filterType, dateFilter, searchTerm]);
-  */
+  }, [filterType, dateFilter, searchTerm]); */
 
-  // Simulación temporal del estado de autenticación
+  const fetchEvents = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      let data;
+
+      if (filterType !== "ALL") {
+        data = await getEventsByCategory(filterType);
+      } else if (dateFilter !== "ALL") {
+        data = await getEventsByDateRange(dateFilter.toLowerCase());
+      } else if (searchTerm.trim() !== "") {
+        data = await getEventsByTitle(searchTerm);
+      } else {
+        data = await getAllEvents();
+      }
+
+      const eventsArray = Array.isArray(data) ? data : data.content || [];
+      console.log("Eventos carregados do backend:", eventsArray);
+
+      setEvents(data);
+    } catch (err) {
+      console.error("Error al obtener los eventos:", err);
+      setError("No se pudieron cargar los eventos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, [filterType, dateFilter, searchTerm]);
+
+ // Simulación temporal del estado de autenticaciónn
   const isLoggedIn = false; // Cambiar a true para probar la vista del dashboard
 
   return (
