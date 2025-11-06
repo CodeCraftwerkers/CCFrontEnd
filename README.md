@@ -1,16 +1,82 @@
-# React + Vite
+# Code Crafters
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Objetivos
 
-Currently, two official plugins are available:
+Code Crafters es una plataforma web que conecta a la comunidad tecnológica mediante eventos online y presenciales.
+Promueve la colaboración, el aprendizaje y la innovación en un entorno moderno y seguro, desarrollado con Spring Boot, React.js y PostgreSQL.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Competencias Técnicas
 
-## React Compiler
+Este proyecto desarrolla las siguientes competencias técnicas:
+WIP
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+  
+## Tecnologías y Herramientas
 
-## Expanding the ESLint configuration
+Este proyecto fue desarrollado utilizando un conjunto moderno de tecnologías y herramientas que garantizan rendimiento, escalabilidad y buenas prácticas en el desarrollo frontend:
+WIP
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Funcionalidades
+
+WIP
+
+## Cómo iniciar el proyecto
+
+### Requisitos previos
+WIP
+
+### Pasos para iniciar el proyecto
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/CodeCraftwerkers/CCFrontEnd.git
+   ```
+
+  
+## Estructura del Proyecto
+
+A continuación se muestra la estructura del proyecto Code Crafters para el FrontEnd
+
+```
+CCFRONTEND
+
+```
+## Contactos
+
+¿Tienes dudas o quieres saber más sobre el proyecto?
+
+Puedes contactar a las desarrolladoras a través de sus perfiles profesionales:
+
+<table style="width:100%; border-collapse: collapse; border: none; text-align:center;">
+  <tr>
+     <td style="border: none; padding: 10px;">
+      <b>Suraya Mattar - PO/Developer</b><br>
+      <a href="https://www.linkedin.com/in/suraya-mattar/" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/surayac" target="_blank">GitHub</a>
+    </td>
+     <td style="border: none; padding: 10px;">
+      <b>Daniella Pacheco - SM/Developer</b><br>
+      <a href="https://www.linkedin.com/in/daniellapacheco/" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/DaniPacheco8" target="_blank">GitHub</a>
+    </td>
+    <td style="border: none; padding: 10px;">
+      <b>Àngela Bello - Developer</b><br>
+      <a href="https://www.linkedin.com/in/angela-bello-developer/" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/AngelaBello-creator" target="_blank">GitHub</a>
+    </td>
+    <td style="border: none; padding: 10px;">
+      <b>Erika Montoya - Developer</b><br>
+      <a href="https://www.linkedin.com/in/erikamontoya/" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/DevErika" target="_blank">GitHub</a>
+    </td>
+    <td style="border: none; padding: 10px;">
+      <b>Estefanía Secanell - Developer</b><br>
+      <a href="https://www.linkedin.com/in/stef-secanell/" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/Abaraira" target="_blank">GitHub</a>
+    </td>
+     <td style="border: none; padding: 10px;">
+      <b>Luisa Moreno - Developer</b><br>
+      <a href="https://www.linkedin.com" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/LuMorenoM" target="_blank">GitHub</a>
+    </td>
