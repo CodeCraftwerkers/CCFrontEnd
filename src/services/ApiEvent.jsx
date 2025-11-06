@@ -106,3 +106,23 @@ export const deleteEvent = async (id) => {
 
   return true;
 };
+
+export const signUpForEvent = async (eventId, userId) => {
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+
+  if (!token) {
+    throw new Error("No hay token guardado.");
+  }
+  const response = await axios.post(
+    `${BASE_URL}/events/${eventId}/signup/${userId}`,
+    {}, 
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
