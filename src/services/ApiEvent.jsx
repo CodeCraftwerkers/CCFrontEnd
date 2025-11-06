@@ -42,7 +42,7 @@ export async function getEventsCreatedByUser() {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) throw new Error("No hay token guardado.");
 
-  const response = await fetch("http://localhost:8080/api/v1/events/created", {
+  const response = await fetch(`${BASE_URL}/events/created`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -65,4 +65,24 @@ export const getEventsUserJoined = async () => {
     "Content-Type": "application/json" },
   });
   return response.data.content || response.data;
+};
+
+export const updateEvent = async (id, eventData) => {
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/events/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(eventData),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: No se pudo actualizar el evento`);
+  }
+
+  return await response.json();
 };

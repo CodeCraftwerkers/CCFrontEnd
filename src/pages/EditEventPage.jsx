@@ -1,38 +1,57 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import mockEvents from "../data/mockEvents";
+import { getEventById, updateEvent } from "../services/ApiEvent.jsx";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 
 export default function EditEventPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const eventToEdit = mockEvents.find((ev) => ev.id === parseInt(id));
-
-  const [eventData, setEventData] = useState(eventToEdit || {});
+  const [eventData, setEventData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!eventToEdit) {
-      console.warn("Evento no encontrado en mockEvents");
-    }
-  }, [eventToEdit]);
+    getEventById(id)
+      .then((data) => {
+        setEventData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error al cargar el evento:", err);
+        setError("No se pudo cargar el evento");
+        setLoading(false);
+      });
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Datos actualizados (solo FrontEnd):", eventData);
-    navigate(`/events/${id}`);
+    try {
+      await updateEvent(id, eventData);
+      alert("Evento actualizado con éxito");
+      navigate("/profile");
+    } catch (err) {
+      console.error(err);
+      alert("Error al actualizar el evento");
+    }
   };
 
-  if (!eventToEdit) {
+  if (loading) {
     return (
       <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <h2 className="text-2xl font-bold text-gray-700">
-          No se encontró el evento a editar.
-        </h2>
+        <p className="text-gray-600 text-lg">Cargando evento...</p>
+      </main>
+    );
+  }
+
+  if (error || !eventData) {
+    return (
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 text-center">
+        <h2 className="text-2xl font-bold text-red-500">{error}</h2>
       </main>
     );
   }
@@ -108,12 +127,12 @@ export default function EditEventPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block font-semibold mb-2 text-gray-700">
-                Fecha
+                Inicio
               </label>
               <input
-                type="date"
-                name="date"
-                value={eventData.date}
+                type="datetime-local"
+                name="startDateTime"
+                value={eventData.startDateTime?.slice(0, 16) || ""}
                 onChange={handleChange}
                 className="w-full border rounded-lg px-3 py-2"
               />
@@ -121,12 +140,12 @@ export default function EditEventPage() {
 
             <div>
               <label className="block font-semibold mb-2 text-gray-700">
-                Hora
+                Fin
               </label>
               <input
-                type="time"
-                name="time"
-                value={eventData.time}
+                type="datetime-local"
+                name="endDateTime"
+                value={eventData.endDateTime?.slice(0, 16) || ""}
                 onChange={handleChange}
                 className="w-full border rounded-lg px-3 py-2"
               />
