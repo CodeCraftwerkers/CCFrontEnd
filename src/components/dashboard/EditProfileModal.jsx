@@ -84,7 +84,7 @@ export default function EditProfileModal({ user, onClose, onSuccess }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-2.5 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition disabled:opacity-60"
+            className="w-full bg-linear-to-r from-orange-500 to-orange-600 text-white py-2.5 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition disabled:opacity-60"
           >
             {loading ? "Guardando..." : "Guardar cambios"}
           </button>

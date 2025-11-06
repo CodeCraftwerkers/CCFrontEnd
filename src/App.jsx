@@ -1,26 +1,17 @@
-import { useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
+import { useUser } from "./context/UserContext.jsx";
+import DashboardHeader from "./components/dashboard/DashboardHeader.jsx";
 import NavBar from "./components/NavBar.jsx";
 import Footer from "./components/Footer.jsx";
 import AppRouter from "./application/Router.jsx";
 
 function App() {
-  const location = useLocation();
-
-  const isLoggedIn = false; // Cambiar a true para probar la vista del dashboard
-
-  const hideNavBar =
-    isLoggedIn &&
-    (location.pathname.startsWith("/events") ||
-      location.pathname.startsWith("/my-events") ||
-      location.pathname.startsWith("/profile"));
+  const { token } = useUser();
 
   return (
     <>
-      {/* NavBar solo si NO debe ocultarse */}
-      {!hideNavBar && <NavBar />}
-
+     
+      {token ? <DashboardHeader /> : < NavBar />}
       <AppRouter />
 
       <Footer />
