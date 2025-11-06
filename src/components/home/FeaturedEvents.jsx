@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import mockEvents from "../../data/mockEvents"; // 👈 asegúrate de export default en mockEvents.js
-import { useNavigate } from "react-router-dom"; // 👈 agrega esto
+import { useNavigate } from "react-router-dom";
+import mockEvents from "../../data/mockEvents";
+
 
 export default function FeaturedEvents() {
   const [events, setEvents] = useState([]);
-  const navigate = useNavigate(); // 👈 crea navigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const sorted = [...mockEvents].sort(
@@ -52,7 +53,7 @@ export default function FeaturedEvents() {
               <p className="text-gray-600 mb-4 text-sm">{event.description}</p>
               <button
                 type="button"
-                onClick={() => navigate("/login")} // 👈 ahora lleva a /login
+                onClick={() => navigate("/login")} 
                 className="px-4 py-2 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-all duration-300"
                 aria-label={`Unirse al evento ${event.title}`}
               >
@@ -62,14 +63,11 @@ export default function FeaturedEvents() {
           ))
         )}
       </div>
-
-      {/* 👇 Aquí el cambio importante */}
       <div className="text-center mt-16">
         <button
-          onClick={() => navigate("/login")} // 👈 ahora lleva a /login
+          onClick={() => navigate("/events")}
           className="px-8 py-3 border-2 border-orange-500 text-orange-600 rounded-lg font-semibold hover:bg-orange-50 hover:shadow-md transition-all duration-300"
-          aria-label="Ver todos los eventos disponibles"
-        >
+          aria-label="Ver todos los eventos disponibles">
           Ver todos los eventos
         </button>
       </div>

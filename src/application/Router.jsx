@@ -9,6 +9,7 @@ import ProfilePage from "../pages/ProfilePage";
 import EventDetailsPage from "../pages/EventDetailsPage";
 import EditEventPage from "../pages/EditEventPage";
 
+
 export default function AppRouter() {
   return (
     <Routes>

@@ -8,15 +8,17 @@ import AppRouter from "./application/Router.jsx";
 function App() {
   const location = useLocation();
 
-  // Ocultar NavBar global en todas las páginas del Dashboard o de eventos
+  const isLoggedIn = false; // Cambiar a true para probar la vista del dashboard
+
   const hideNavBar =
-    location.pathname.startsWith("/events") ||
-    location.pathname.startsWith("/my-events") ||
-    location.pathname.startsWith("/profile");
+    isLoggedIn &&
+    (location.pathname.startsWith("/events") ||
+      location.pathname.startsWith("/my-events") ||
+      location.pathname.startsWith("/profile"));
 
   return (
     <>
-      {/* Mostrar NavBar solo si la ruta NO debe ocultarse */}
+      {/* NavBar solo si NO debe ocultarse */}
       {!hideNavBar && <NavBar />}
 
       <AppRouter />
