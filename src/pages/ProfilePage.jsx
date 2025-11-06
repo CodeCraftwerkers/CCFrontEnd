@@ -1,5 +1,5 @@
 import NavBar from "../components/NavBar.jsx";
-import Footer from "../components/Footer.jsx";
+import { LogoutButton } from "../components/LogOutButton.jsx";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../services/ApiUser.jsx";
 import { getEventsCreatedByUser } from "../services/ApiEvent.jsx";
@@ -42,8 +42,7 @@ export default function ProfilePage() {
             Inicia sesión de nuevo
           </a>
         </main>
-        <Footer />
-      </>
+        </>
     );
   }
 
@@ -54,8 +53,7 @@ export default function ProfilePage() {
         <main className="min-h-screen flex flex-col justify-center items-center text-gray-600">
           <p className="text-lg">Cargando perfil...</p>
         </main>
-        <Footer />
-      </>
+     </>
     );
   }
 
@@ -79,10 +77,12 @@ export default function ProfilePage() {
           </div>
 
           <button
-            onClick={() => setShowEdit(true)}
-            className="mt-5 px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition cursor-pointer">
+          onClick={() => setShowEdit(true)}
+          className="mt-5 px-6 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition cursor-pointer m-2">
             Editar perfil
           </button>
+
+          <LogoutButton />
         </section>
 
         {showEdit && (
@@ -117,7 +117,7 @@ export default function ProfilePage() {
             )}          </div>
         </div>
       </main>
-      <Footer />
+     
     </>
   );
 }
