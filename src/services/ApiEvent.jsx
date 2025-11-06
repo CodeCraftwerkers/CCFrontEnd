@@ -59,8 +59,10 @@ export async function getEventsCreatedByUser() {
 
 export const getEventsUserJoined = async () => {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-  const response = await axios.get("http://localhost:8080/api/v1/events/joined", {
-    headers: { Authorization: `Bearer ${token}` },
+  if (!token) throw new Error("No se encontró token.");
+  const response = await axios.get(`${BASE_URL}/events/joined`, {
+    headers: { Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json" },
   });
   return response.data.content || response.data;
 };
