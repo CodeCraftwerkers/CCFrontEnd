@@ -86,3 +86,23 @@ export const updateEvent = async (id, eventData) => {
 
   return await response.json();
 };
+
+// ✅ NUEVO: eliminar evento
+export const deleteEvent = async (id) => {
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) throw new Error("No se encontró token.");
+
+  const response = await fetch(`${BASE_URL}/events/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: No se pudo eliminar el evento`);
+  }
+
+  return true;
+};

@@ -1,15 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getEventById, updateEvent } from "../services/ApiEvent.jsx";
+import { getEventById, updateEvent, deleteEvent } from "../services/ApiEvent.jsx";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
-
+import ConfirmModal from "../components/common/ConfirmModal.jsx"; 
 export default function EditEventPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [eventData, setEventData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [showConfirm, setShowConfirm] = useState(false);
   useEffect(() => {
     getEventById(id)
       .then((data) => {
@@ -22,12 +22,10 @@ export default function EditEventPage() {
         setLoading(false);
       });
   }, [id]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -39,7 +37,16 @@ export default function EditEventPage() {
       alert("Error al actualizar el evento");
     }
   };
-
+  const handleDelete = async () => {
+    try {
+      await deleteEvent(id);
+      alert("Evento eliminado con éxito");
+      navigate("/profile");
+    } catch (err) {
+      console.error(err);
+      alert("Error al eliminar el evento");
+    }
+  };
   if (loading) {
     return (
       <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 text-center">
@@ -60,18 +67,14 @@ export default function EditEventPage() {
     <>
       <DashboardHeader />
       <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 bg-gray-100 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">
-          Editar evento
-        </h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-800">Editar evento</h1>
 
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-md rounded-xl p-8 flex flex-col gap-6"
         >
           <div>
-            <label className="block font-semibold mb-2 text-gray-700">
-              Título
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Título</label>
             <input
               type="text"
               name="title"
@@ -80,11 +83,8 @@ export default function EditEventPage() {
               className="w-full border rounded-lg px-3 py-2"
             />
           </div>
-
           <div>
-            <label className="block font-semibold mb-2 text-gray-700">
-              Descripción
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Descripción</label>
             <textarea
               name="description"
               value={eventData.description}
@@ -93,12 +93,9 @@ export default function EditEventPage() {
               rows="5"
             />
           </div>
-
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold mb-2 text-gray-700">
-                Categoría
-              </label>
+              <label className="block font-semibold mb-2 text-gray-700">Categoría</label>
               <select
                 name="category"
                 value={eventData.category}
@@ -123,12 +120,9 @@ export default function EditEventPage() {
               />
             </div>
           </div>
-
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold mb-2 text-gray-700">
-                Inicio
-              </label>
+              <label className="block font-semibold mb-2 text-gray-700">Inicio</label>
               <input
                 type="datetime-local"
                 name="startDateTime"
@@ -137,11 +131,8 @@ export default function EditEventPage() {
                 className="w-full border rounded-lg px-3 py-2"
               />
             </div>
-
             <div>
-              <label className="block font-semibold mb-2 text-gray-700">
-                Fin
-              </label>
+              <label className="block font-semibold mb-2 text-gray-700">Fin</label>
               <input
                 type="datetime-local"
                 name="endDateTime"
@@ -151,7 +142,6 @@ export default function EditEventPage() {
               />
             </div>
           </div>
-
           <div>
             <label className="block font-semibold mb-2 text-gray-700">
               Ubicación o enlace
@@ -164,11 +154,8 @@ export default function EditEventPage() {
               className="w-full border rounded-lg px-3 py-2"
             />
           </div>
-
           <div>
-            <label className="block font-semibold mb-2 text-gray-700">
-              Imagen
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Imagen</label>
             <input
               type="text"
               name="imageUrl"
@@ -177,23 +164,38 @@ export default function EditEventPage() {
               className="w-full border rounded-lg px-3 py-2"
             />
           </div>
-
-          <div className="flex justify-end gap-4 mt-6">
+          <div className="flex justify-between items-center mt-6">
             <button
               type="button"
-              onClick={() => navigate(`/events/${id}`)}
-              className="px-6 py-3 rounded-lg bg-gray-300 text-gray-700 font-semibold"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
+              onClick={() => setShowConfirm(true)}
               className="px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition"
             >
-              Guardar cambios
-            </button>
+              Eliminar evento
+            </button>``
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => navigate(`/events/${id}`)}
+                className="px-6 py-3 rounded-lg bg-gray-300 text-gray-700 font-semibold"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-lg bg-orange-600 text-white font-bold hover:bg-orange-700 transition"
+              >
+                Guardar cambios
+              </button>
+            </div>
           </div>
         </form>
+        {showConfirm && (
+          <ConfirmModal
+            message="¿Estás seguro que quieres borrar este evento?"
+            onConfirm={handleDelete}
+            onCancel={() => setShowConfirm(false)}
+          />
+        )}
       </main>
     </>
   );
