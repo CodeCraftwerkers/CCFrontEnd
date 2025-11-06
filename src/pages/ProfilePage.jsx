@@ -4,7 +4,7 @@ import { getCurrentUser } from "../services/ApiUser.jsx";
 import { getEventsCreatedByUser, getEventsUserJoined } from "../services/ApiEvent.jsx";
 import EditProfileModal from "../components/dashboard/EditProfileModal.jsx";
 import ChangePasswordModal from "../components/dashboard/ChangePasswordModal.jsx";
-import { EventsTabs } from "../components/events/EventsTabs.jsx"; // ✅ AÑADIDO
+import { EventsTabs } from "../components/events/EventsTabs.jsx"; 
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -17,8 +17,8 @@ export default function ProfilePage() {
   const getInitials = (name) => {
   if (!name) return "";
   const parts = name.trim().split(" ");
-  if (parts.length === 1) return parts[0][0].toUpperCase(); // solo un nombre
-  if (parts.length === 2) return (parts[0][0] + parts[1][0]).toUpperCase(); // nombre + apellido
+  if (parts.length === 1) return parts[0][0].toUpperCase(); 
+  if (parts.length === 2) return (parts[0][0] + parts[1][0]).toUpperCase(); 
   // más de dos palabras → primeras tres letras
   return parts.slice(0, 3).map((p) => p[0].toUpperCase()).join("");
 };
@@ -112,11 +112,11 @@ export default function ProfilePage() {
         <ChangePasswordModal onClose={() => setShowChangePassword(false)} />
       )}
 
-      {/* ✅ AQUI VA EL COMPONENTE DE TABS REUTILIZABLE */}
+      {/*  AQUI VA EL COMPONENTE DE TABS REUTILIZABLE */}
       <div className="max-w-4xl w-full mt-10">
-        <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} /> {/* ✅ NUEVO */}
+        <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {/* ✅ CONTENIDO SEGÚN TAB SELECCIONADO */}
+        {/*  CONTENIDO SEGÚN TAB SELECCIONADO */}
         {activeTab === "created" && (
           <div className="bg-white rounded-xl shadow-md p-6 mt-6 text-gray-700">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
