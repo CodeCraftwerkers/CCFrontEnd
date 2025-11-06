@@ -14,6 +14,17 @@ export const getEventById = async (id) => {
   return response.data;
 };
 
+export const getEventsByUsername = async (username) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/events/filter?username=${encodeURIComponent(username)}`);
+    // Asegura que siempre devuelva un array válido
+    return response.data.content || response.data || [];
+  } catch (error) {
+    console.error("Error al obtener eventos por usuario:", error);
+    return [];
+  }
+};
+
 // X categoría (ONLINE / PRESENCIAL)
 export const getEventsByCategory = async (category) => {
   const response = await axios.get(`${BASE_URL}/events/filter?category=${category}`);
@@ -33,11 +44,6 @@ export const getEventsByTitle = async (title) => {
 };
 
 // x Usuario
-export const getEventsByUsername = async (username) => {
-  const response = await axios.get(`${BASE_URL}/events/filter?username=${username}`);
-  return response.data.content || response.data;
-};
-
 export async function getEventsCreatedByUser() {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) throw new Error("No hay token guardado.");
