@@ -20,9 +20,7 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const searchTimeout = useRef(null); // ⏱️ para el debounce
-
-  // ✅ Filtrado local inmediato
+  const searchTimeout = useRef(null);
   const filteredEvents = events.filter((event) => {
     const search = searchTerm.toLowerCase();
 
@@ -56,8 +54,6 @@ export default function EventsPage() {
 
     return matchesSearch && matchesType && matchesDate;
   });
-
-  // ✅ Llamada al backend (con debounce)
   const fetchEvents = async () => {
     setLoading(true);
     setError("");
@@ -70,15 +66,12 @@ export default function EventsPage() {
       } else if (dateFilter !== "ALL") {
         data = await getEventsByDateRange(dateFilter.toLowerCase());
       } else if (searchTerm.trim() !== "") {
-        // Buscar primero por título
         data = await getEventsByTitle(searchTerm);
 
         const isEmpty =
           !data ||
           (Array.isArray(data) && data.length === 0) ||
           (data.content && data.content.length === 0);
-
-        // Si no encuentra nada, buscar por organizador (username)
         if (isEmpty) {
           console.log("Buscando por usuario:", searchTerm);
           data = await getEventsByUsername(searchTerm);
@@ -100,19 +93,14 @@ export default function EventsPage() {
       setLoading(false);
     }
   };
-
-  // ✅ Actualizar eventos al cambiar filtros o después del debounce
   useEffect(() => {
     clearTimeout(searchTimeout.current);
 
     searchTimeout.current = setTimeout(() => {
       fetchEvents();
-    }, 1000); // Espera 1 segundo desde la última tecla
-
+    }, 1000);
     return () => clearTimeout(searchTimeout.current);
   }, [filterType, dateFilter, searchTerm]);
-
-  // ✅ Permitir buscar al presionar Enter
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -120,9 +108,7 @@ export default function EventsPage() {
       fetchEvents();
     }
   };
-
-  const isLoggedIn = false; // Cambiar a true si el usuario está logueado
-
+  const isLoggedIn = false;
   return (
     <>
       {isLoggedIn && <DashboardHeader />}
@@ -133,7 +119,6 @@ export default function EventsPage() {
         } pb-16 bg-gray-50 min-h-screen`}
       >
         <div className="max-w-6xl mx-auto">
-          {/* 🔍 SearchBar siempre visible */}
           <div onKeyDown={handleKeyDown}>
             <SearchBar
               searchTerm={searchTerm}
@@ -145,13 +130,9 @@ export default function EventsPage() {
               setDateFilter={setDateFilter}
             />
           </div>
-
-          {/* Tabs solo para usuarios logueados */}
           {isLoggedIn && (
             <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
           )}
-
-          {/* 🧩 Lista de eventos */}
           <section className="grid grid-cols-1 gap-8 mt-8 max-w-4xl mx-auto">
             {loading ? (
               <p className="text-center text-gray-500">Cargando eventos...</p>

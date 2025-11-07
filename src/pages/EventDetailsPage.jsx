@@ -2,18 +2,19 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CalendarDays, Users } from "lucide-react";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
-import { getEventById } from "../services/ApiEvent";
+import ConfirmModal from "../components/common/ConfirmModal.jsx";
+import { getEventById, signUpToEvent, unSignFromEvent } from "../services/ApiEvent";
 import { getCurrentUser } from "../services/ApiUser";
 
 export default function EventDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [event, setEvent] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [isJoined, setIsJoined] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,6 +24,10 @@ export default function EventDetailsPage() {
         ]);
         setEvent(eventData);
         setCurrentUser(userData);
+        const alreadyJoined = eventData.attendees?.some(
+          (att) => att.id === userData.id
+        );
+        setIsJoined(alreadyJoined);
       } catch (err) {
         console.error("Error al cargar evento:", err);
         setError("No se pudo cargar la información del evento.");
@@ -32,8 +37,40 @@ export default function EventDetailsPage() {
     };
     fetchData();
   }, [id]);
-
   const handleBackToProfile = () => navigate("/profile");
+
+  const handleJoinToggle = async () => {
+    if (!currentUser || !currentUser.id) {
+      alert("Debes iniciar sesión para participar en el evento.");
+      return;
+    }
+
+    if (isJoined) {
+      setShowConfirm(true);
+      return;
+    }
+
+    try {
+      await signUpToEvent(event.id, currentUser.id);
+      setIsJoined(true);
+      alert("Te has apuntado al evento con éxito.");
+    } catch (err) {
+      console.error(err);
+      alert("Error al apuntarse al evento.");
+    }
+  };
+
+  const handleConfirmUnsign = async () => {
+    try {
+      await unSignFromEvent(event.id, currentUser.id);
+      setIsJoined(false);
+      setShowConfirm(false);
+      alert("Has cancelado tu participación en el evento.");
+    } catch (err) {
+      console.error(err);
+      alert("Error al cancelar la participación.");
+    }
+  };
 
   if (loading) {
     return (
@@ -57,7 +94,6 @@ export default function EventDetailsPage() {
       </main>
     );
   }
-
   const formattedDate = new Date(event.startDateTime).toLocaleDateString("es-ES", {
     day: "2-digit",
     month: "long",
@@ -69,7 +105,6 @@ export default function EventDetailsPage() {
   });
 
   const isCreator = currentUser && event.user && currentUser.username === event.user.username;
-
   return (
     <>
       <DashboardHeader />
@@ -97,7 +132,6 @@ export default function EventDetailsPage() {
                 {event.category}
               </span>
             </div>
-
             <div className="flex items-center gap-4 text-gray-700">
               <div className="flex items-center gap-2">
                 <CalendarDays size={20} />
@@ -112,7 +146,6 @@ export default function EventDetailsPage() {
                 </span>
               </div>
             </div>
-
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-3 text-gray-800">
                 Descripción del evento
@@ -121,9 +154,20 @@ export default function EventDetailsPage() {
                 {event.description || "Sin descripción disponible."}
               </p>
             </div>
+             <div className="flex flex-col sm:flex-row gap-4 mt-6">
+              {!isCreator && (
+                <button
+                  onClick={handleJoinToggle}
+                  className={`px-6 py-3 rounded-lg font-bold transition ${
+                    isJoined
+                      ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                      : "bg-orange-600 text-white hover:bg-orange-700"
+                  }`}
+                >
+                  {isJoined ? "Cancelar participación" : "Apuntarme al evento"}
+                </button>
+              )}
 
-            {/* Botones */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-6">
               {isCreator && (
                 <button
                   onClick={() => navigate(`/events/edit/${id}`)}
@@ -141,8 +185,6 @@ export default function EventDetailsPage() {
               </button>
             </div>
           </div>
-
-          {/* Columna derecha: imagen */}
           <div className="flex-1">
             <img
               src={event.imageUrl}
@@ -151,6 +193,14 @@ export default function EventDetailsPage() {
             />
           </div>
         </section>
+
+        {showConfirm && (
+          <ConfirmModal
+            message="¿Estás segura/o que no quieres participar?"
+            onConfirm={handleConfirmUnsign}
+            onCancel={() => setShowConfirm(false)}
+          />
+        )}
       </main>
     </>
   );
