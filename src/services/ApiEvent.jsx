@@ -27,19 +27,16 @@ export const getEventsByCategory = async (category) => {
   return response.data.content || response.data;
 };
 
-// x fecha (today / week / month)
 export const getEventsByDateRange = async (range) => {
   const response = await axios.get(`${BASE_URL}/events/filter?timeRange=${range}`);
   return response.data.content || response.data;
 };
 
-// x Filtrar por título
 export const getEventsByTitle = async (title) => {
   const response = await axios.get(`${BASE_URL}/events/filter?title=${encodeURIComponent(title)}`);
   return response.data.content || response.data;
 };
 
-// x Usuario
 export async function getEventsCreatedByUser() {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) throw new Error("No hay token guardado.");

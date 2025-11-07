@@ -12,7 +12,6 @@ export const SearchBar = ({
 }) => {
   return (
     <section className="bg-white rounded-xl shadow-sm p-6 mb-8">
-      {/* Campo de búsqueda */}
       <div className="relative mb-5">
         <Search
           className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -26,8 +25,6 @@ export const SearchBar = ({
           className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
         />
       </div>
-
-      {/* Filtro (Todos / Online / Presencial) */}
       <div className="flex flex-wrap gap-2 mb-5">
         {["ALL", "ONLINE", "PRESENCIAL"].map((category) => (
           <button
@@ -47,8 +44,6 @@ export const SearchBar = ({
           </button>
         ))}
       </div>
-
-      {/* Filtros inferiores (Mostrando X eventos / Filtro de fecha) */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm text-gray-600">
         <p>
           Mostrando {visibleCount} evento{visibleCount !== 1 && "s"}

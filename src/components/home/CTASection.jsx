@@ -12,7 +12,6 @@ export default function CTASection() {
       className="bg-linear-to-br from-orange-50 via-white to-orange-100 py-20 border-t border-orange-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* === Header principal === */}
         <header className="text-center mb-16">
           <h2
             id="cta-section-title"
@@ -25,8 +24,6 @@ export default function CTASection() {
             online. Empieza en solo tres pasos:
           </p>
         </header>
-
-        {/* === Tres pasos (How it works) === */}
         <ol
           className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16"
           aria-label="Pasos para comenzar a participar en Code Crafters"
@@ -77,8 +74,6 @@ export default function CTASection() {
             </p>
           </li>
         </ol>
-
-        {/* === Llamada a la acción (Call to Action) === */}
         <div className="text-center">
           <button
             onClick={handleRegister}

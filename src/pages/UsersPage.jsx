@@ -1,5 +1,3 @@
-//import NavBar from "../components/NavBar.jsx";
-
 export default function UsersPage() {
   return (
     <>

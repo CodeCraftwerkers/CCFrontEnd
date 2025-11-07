@@ -108,7 +108,7 @@ export default function ProfilePage() {
 
           <button
             onClick={() => navigate("/events/create")}
-            className="px-6 py-2 h-11 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-green-700 transition cursor-pointer"
+            className="px-6 py-2 h-11 bg-linear-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-green-700 transition cursor-pointer"
           >
             Crear evento
           </button>
