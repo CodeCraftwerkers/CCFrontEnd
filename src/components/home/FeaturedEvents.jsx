@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllEvents, signUpForEvent } from "../../services/ApiEvent";
+import toast from "react-hot-toast";
+import { getAllEvents, signUpToEvent, getEventsUserJoined } from "../../services/ApiEvent";
 import { getCurrentUser } from "../../services/ApiUser";
-
 
 export default function FeaturedEvents() {
   const [events, setEvents] = useState([]);
+  const [joinedEvents, setJoinedEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -16,25 +17,21 @@ export default function FeaturedEvents() {
       try {
         const user = await getCurrentUser();
         setCurrentUser(user);
+        const joined = await getEventsUserJoined();
+        setJoinedEvents(joined.map((e) => e.id));
       } catch {
         setCurrentUser(null);
       }
     };
     fetchUser();
   }, []);
-
-
   useEffect(() => {
     async function fetchEvents() {
       try {
         const data = await getAllEvents();
         const sorted = [...data]
-          .sort(
-            (a, b) =>
-              new Date(a.startDateTime) - new Date(b.startDateTime)
-          )
+          .sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime))
           .slice(0, 3);
-
         setEvents(sorted);
       } catch (err) {
         console.error("Error al cargar eventos destacados:", err);
@@ -45,20 +42,29 @@ export default function FeaturedEvents() {
     }
     fetchEvents();
   }, []);
-
   const handleJoinEvent = async (eventId) => {
     if (!currentUser) {
-      alert("Debes iniciar sesión para unirte a un evento.");
+      toast.error("Debes iniciar sesión para unirte a un evento.");
       navigate("/login");
+      return;
+    }
+    if (joinedEvents.includes(eventId)) {
+      toast("Ya estás apuntada/o a este evento", {
+        icon: "ℹ️",
+        style: { border: "1px solid #f97316", padding: "10px" },
+      });
       return;
     }
 
     try {
-      await signUpForEvent(eventId, currentUser.id);
-      alert("Te has unido al evento correctamente!");
+      await signUpToEvent(eventId, currentUser.id);
+      setJoinedEvents((prev) => [...prev, eventId]);
+
+      toast.success("¡Te has apuntado al evento con éxito!");
+      navigate(`/events/${eventId}`);
     } catch (err) {
       console.error("Error al unirse al evento:", err);
-      alert("No se pudo unir al evento. Inténtalo de nuevo.");
+      toast.error("No se pudo unir al evento. Inténtalo de nuevo.");
     }
   };
 
@@ -78,9 +84,7 @@ export default function FeaturedEvents() {
     );
   }
 
-
   return (
-   
     <section
       aria-labelledby="featured-events-title"
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
@@ -97,7 +101,6 @@ export default function FeaturedEvents() {
           Crafters.
         </p>
       </header>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {events.map((event) => (
           <article
@@ -109,9 +112,11 @@ export default function FeaturedEvents() {
               alt={event.title}
               className="w-full h-40 object-cover rounded-lg mb-4"
             />
+
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               {event.title}
             </h3>
+
             <p className="text-sm text-orange-600 mb-1">
               {new Date(event.startDateTime).toLocaleDateString("es-ES", {
                 day: "2-digit",
@@ -119,24 +124,32 @@ export default function FeaturedEvents() {
                 year: "numeric",
               })}
             </p>
+
             <p className="text-sm font-medium text-gray-500 mb-2">
               {event.category === "ONLINE" ? "Online" : "Presencial"}
             </p>
+
             <p className="text-gray-600 mb-4 text-sm line-clamp-3">
               {event.description}
             </p>
+
             <button
               type="button"
               onClick={() => handleJoinEvent(event.id)}
-              className="px-4 py-2 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-all duration-300 cursor-pointer"
+              className={`px-4 py-2 w-full font-medium rounded-lg transition-all duration-300 cursor-pointer ${
+                joinedEvents.includes(event.id)
+                  ? "bg-gray-200 text-gray-600"
+                  : "bg-orange-600 text-white hover:bg-orange-700"
+              }`}
               aria-label={`Unirse al evento ${event.title}`}
             >
-              {currentUser ? "Unirme al evento" : "Iniciar sesión para unirse"}
+              {joinedEvents.includes(event.id)
+                ? "Ya estás apuntada/o"
+                : "Participar"}
             </button>
           </article>
         ))}
       </div>
-
       <div className="text-center mt-16">
         <button
           onClick={() => navigate("/events")}
