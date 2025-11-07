@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Calendar, Users } from "lucide-react";
 import ConfirmModal from "../common/ConfirmModal.jsx";
@@ -5,6 +6,7 @@ import { getCurrentUser } from "../../services/ApiUser.jsx";
 import { signUpToEvent, unSignFromEvent } from "../../services/ApiEvent.jsx";
 
 export const EventCard = ({ event }) => {
+  const navigate = useNavigate()
   const [isJoined, setIsJoined] = useState(event.isJoined || false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -35,8 +37,7 @@ export const EventCard = ({ event }) => {
       return;
     }
 
-    // Si ya está apuntado, abrir modal de confirmación para desapuntarse
-    if (isJoined) {
+      if (isJoined) {
       setShowConfirm(true);
       return;
     }
@@ -59,6 +60,10 @@ export const EventCard = ({ event }) => {
       alert("Error al cancelar tu participación.");
     }
   };
+    const handleViewDetails = () => {
+    navigate(`/events/${event.id}`);
+  };
+
 
   return (
     <article
@@ -129,8 +134,14 @@ export const EventCard = ({ event }) => {
           }`}
           aria-label={isJoined ? "Cancelar participación" : "Participar"}
         >
-          {isJoined ? "Cancelar participación" : "Participar"}
+        {isJoined ? "Cancelar participación" : "Participar"}
         </button>
+          <button
+            onClick={handleViewDetails}
+            className="w-full py-2.5 rounded-lg font-medium border-2 border-orange-500 text-orange-600 hover:bg-orange-50 transition mt-3"
+          > Ver detalles del evento
+      </button>
+
       </div>
       {showConfirm && (
         <ConfirmModal
