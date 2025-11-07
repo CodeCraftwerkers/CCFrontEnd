@@ -54,10 +54,12 @@ export default function EventDetailsPage() {
     try {
       await signUpToEvent(event.id, currentUser.id);
       setIsJoined(true);
-      alert("Te has apuntado al evento con éxito.");
+      toast.success("Te has apuntado al evento con éxito!");
+
     } catch (err) {
       console.error(err);
-      alert("Error al apuntarse al evento.");
+      toast.error("Error al apuntarse al evento.");
+
     }
   };
 
@@ -66,10 +68,17 @@ export default function EventDetailsPage() {
       await unSignFromEvent(event.id, currentUser.id);
       setIsJoined(false);
       setShowConfirm(false);
-      alert("Has cancelado tu participación en el evento.");
+      toast("Has cancelado tu participación en el evento.", {
+        icon: "🚫",
+        style: {
+          border: "1px solid #f97316",
+          padding: "12px",
+          color: "#333",
+        },
+      });
     } catch (err) {
       console.error(err);
-      alert("Error al cancelar la participación.");
+      toast.error("Error al cancelar la participación.");
     }
   };
 
