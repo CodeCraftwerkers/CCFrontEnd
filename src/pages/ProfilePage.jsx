@@ -9,7 +9,6 @@ import {
 import EditProfileModal from "../components/dashboard/EditProfileModal.jsx";
 import ChangePasswordModal from "../components/dashboard/ChangePasswordModal.jsx";
 import { EventsTabs } from "../components/events/EventsTabs.jsx";
-
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [allEvents, setAllEvents] = useState([]);
@@ -19,7 +18,6 @@ export default function ProfilePage() {
   const [showEdit, setShowEdit] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
-
   const getInitials = (name) => {
     if (!name) return "";
     const parts = name.trim().split(" ");
@@ -124,12 +122,8 @@ export default function ProfilePage() {
       {showChangePassword && (
         <ChangePasswordModal onClose={() => setShowChangePassword(false)} />
       )}
-
-      {/* ✅ Tabs: Todos / Creados / Apuntados */}
       <div className="max-w-4xl w-full mt-10">
         <EventsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-
-        {/* 🔸 TAB: TODOS LOS EVENTOS */}
         {activeTab === "all" && (
           <div className="bg-white rounded-xl shadow-md p-6 mt-6 text-gray-700">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -163,8 +157,6 @@ export default function ProfilePage() {
                           </span>
                         </p>
                       </div>
-
-                      {/* ✅ Botón VER EVENTO */}
                       <button
                         onClick={() => (window.location.href = `/events/${ev.id}`)}
                         className="mt-3 sm:mt-0 px-5 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition cursor-pointer"
@@ -180,8 +172,6 @@ export default function ProfilePage() {
             )}
           </div>
         )}
-
-        {/* 🔸 TAB: CREADOS */}
         {activeTab === "created" && (
           <div className="bg-white rounded-xl shadow-md p-6 mt-6 text-gray-700">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -213,7 +203,6 @@ export default function ProfilePage() {
                           <span className="font-medium">{ev.location}</span>
                         </p>
                       </div>
-
                       <div className="flex gap-3 mt-3 sm:mt-0">
                         <button
                           onClick={() =>
@@ -223,7 +212,6 @@ export default function ProfilePage() {
                         >
                           Editar
                         </button>
-
                         <button
                           onClick={() =>
                             (window.location.href = `/events/${ev.id}`)
@@ -242,8 +230,6 @@ export default function ProfilePage() {
             )}
           </div>
         )}
-
-        {/* 🔸 TAB: APUNTADOS */}
         {activeTab === "joined" && (
           <div className="bg-white rounded-xl shadow-md p-6 mt-6 text-gray-700">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
