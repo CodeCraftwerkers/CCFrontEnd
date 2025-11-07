@@ -4,6 +4,7 @@ import { CalendarDays, Users } from "lucide-react";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 import { getEventById } from "../services/ApiEvent";
 import { getCurrentUser } from "../services/ApiUser";
+import toast from "react-hot-toast";
 
 export default function EventDetailsPage() {
   const { id } = useParams();
@@ -76,7 +77,7 @@ export default function EventDetailsPage() {
 
       <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 pt-20 bg-gray-100 min-h-screen">
         <section className="flex flex-col lg:flex-row gap-10">
-          {/* Columna izquierda */}
+
           <div className="flex-1 space-y-6">
             <h1 className="text-3xl font-bold text-gray-800">{event.title}</h1>
             <p className="text-lg text-gray-600">
