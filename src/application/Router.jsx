@@ -8,6 +8,7 @@ import UsersPage from "../pages/UsersPage";
 import ProfilePage from "../pages/ProfilePage";
 import EventDetailsPage from "../pages/EventDetailsPage";
 import EditEventPage from "../pages/EditEventPage";
+import CreateEventPage from "../pages/CreateEventPage";
 
 
 export default function AppRouter() {
@@ -21,6 +22,7 @@ export default function AppRouter() {
       <Route path="/events/edit/:id" element={<EditEventPage />} />
       <Route path="/users" element={<UsersPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/events/create" element={<CreateEventPage />} />
     </Routes>
   );
 }

@@ -2,13 +2,11 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL?.trim() || "http://localhost:8080/api/v1";
 
-// Todos los eventos
 export const getAllEvents = async () => {
   const response = await axios.get(`${BASE_URL}/events`);
   return response.data.content || response.data;
 };
 
-// Por ID
 export const getEventById = async (id) => {
   const response = await axios.get(`${BASE_URL}/events/${id}`);
   return response.data;
@@ -17,7 +15,6 @@ export const getEventById = async (id) => {
 export const getEventsByUsername = async (username) => {
   try {
     const response = await axios.get(`${BASE_URL}/events/filter?username=${encodeURIComponent(username)}`);
-    // Asegura que siempre devuelva un array válido
     return response.data.content || response.data || [];
   } catch (error) {
     console.error("Error al obtener eventos por usuario:", error);
@@ -25,7 +22,6 @@ export const getEventsByUsername = async (username) => {
   }
 };
 
-// X categoría (ONLINE / PRESENCIAL)
 export const getEventsByCategory = async (category) => {
   const response = await axios.get(`${BASE_URL}/events/filter?category=${category}`);
   return response.data.content || response.data;
@@ -73,6 +69,24 @@ export const getEventsUserJoined = async () => {
   return response.data.content || response.data;
 };
 
+export const createEvent = async (eventData) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const response = await axios.post(
+      `${BASE_URL}/events`,
+      eventData,
+      { headers }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error al crear el evento:", error);
+    throw error.response?.data || error;
+  }
+};
+
 export const updateEvent = async (id, eventData) => {
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -93,7 +107,6 @@ export const updateEvent = async (id, eventData) => {
   return await response.json();
 };
 
-// x eliminar evento
 export const deleteEvent = async (id) => {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) throw new Error("No se encontró token.");
@@ -132,7 +145,7 @@ export const signUpForEvent = async (eventId, userId) => {
   );
   return response.data;
 };
-// x Apuntarse a un evento
+
 export const signUpToEvent = async (eventId, userId) => {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) throw new Error("No se encontró token.");
@@ -152,7 +165,6 @@ export const signUpToEvent = async (eventId, userId) => {
   return await response.json();
 };
 
-// x Desapuntarse de un evento
 export const unSignFromEvent = async (eventId, userId) => {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) throw new Error("No se encontró token.");

@@ -1,14 +1,13 @@
 import { LogoutButton } from "../components/LogOutButton.jsx";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../services/ApiUser.jsx";
-import {
-  getAllEvents,
-  getEventsCreatedByUser,
-  getEventsUserJoined,
-} from "../services/ApiEvent.jsx";
+import { getAllEvents, getEventsCreatedByUser, getEventsUserJoined } from "../services/ApiEvent.jsx";
 import EditProfileModal from "../components/dashboard/EditProfileModal.jsx";
 import ChangePasswordModal from "../components/dashboard/ChangePasswordModal.jsx";
 import { EventsTabs } from "../components/events/EventsTabs.jsx";
+import { useNavigate } from "react-router-dom";
+
+
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [allEvents, setAllEvents] = useState([]);
@@ -18,6 +17,8 @@ export default function ProfilePage() {
   const [showEdit, setShowEdit] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
+  const navigate = useNavigate();
+  
   const getInitials = (name) => {
     if (!name) return "";
     const parts = name.trim().split(" ");
@@ -103,6 +104,13 @@ export default function ProfilePage() {
             className="px-6 py-2 h-11 bg-linear-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition cursor-pointer"
           >
             Cambiar contraseña
+          </button>
+
+          <button
+            onClick={() => navigate("/events/create")}
+            className="px-6 py-2 h-11 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-green-700 transition cursor-pointer"
+          >
+            Crear evento
           </button>
 
           <div className="h-11 flex items-center">
