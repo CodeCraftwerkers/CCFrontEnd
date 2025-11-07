@@ -18,17 +18,14 @@ describe("CTASection", () => {
   it("debería renderizar título, pasos y botón", () => {
     render(<CTASection />);
 
-    // Título principal
     expect(
       screen.getByText("¡Únete a la comunidad Code Crafters!")
     ).toBeInTheDocument();
 
-    // Pasos
     expect(screen.getByText("1. Crea tu cuenta")).toBeInTheDocument();
     expect(screen.getByText("2. Explora eventos")).toBeInTheDocument();
     expect(screen.getByText("3. Únete y participa")).toBeInTheDocument();
 
-    // Botón usando aria-label
     expect(
       screen.getByRole("button", {
         name: /Crear una cuenta y unirse a Code Crafters/i,
